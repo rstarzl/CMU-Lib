@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cmulib-commu">
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac target="1.6" srcdir="src" destdir="build/classes"/>
+    </target>
+
+    <target name="run-master">
+        <java classname="MasterNodeTest">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-slave">
+        <java classname="SlaveNodeTest">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+            </classpath>
+        </java>
+    </target>
+
+</project>
+
