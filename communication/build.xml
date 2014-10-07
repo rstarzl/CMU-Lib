@@ -10,7 +10,7 @@
         <javac target="1.6" srcdir="src" destdir="build/classes"/>
     </target>
 
-    <target name="run-master">
+    <target name="run-master" depends="compile">
         <java classname="MasterNodeTest">
             <arg line="${args}"/>
             <classpath>
@@ -19,7 +19,7 @@
         </java>
     </target>
 
-    <target name="run-slave">
+    <target name="run-slave" depends="compile">
         <java classname="SlaveNodeTest">
             <arg line="${args}"/>
             <classpath>
