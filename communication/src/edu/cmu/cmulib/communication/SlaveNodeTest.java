@@ -9,8 +9,8 @@ import java.io.*;
 
 public class SlaveNodeTest {
     public static  void main(String[] args) {
-        SlaveNode sn = new SlaveNode(args[0]);
-        sn.connect();
+        SlaveNode slave = new SlaveNode(args[0]);
+        slave.connect();
     }
 
 }
