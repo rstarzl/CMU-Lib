@@ -25,18 +25,18 @@ public class MasterNode {
         new Thread(new ServerService()).start();
         System.out.println("why!!!!??????!");
     }
-    
+
     public void send(int id, String message){
         SlaveData aSlaveData = slaveMap.get(id);
         aSlaveData.out.println(message);
         aSlaveData.out.flush();
     }
-    
+
     private class ServerService implements Runnable{
         public void run(){
             while(true){
                 Socket socket = null;
-                try {    				    				
+                try {
                     socket = serverSocket.accept();
                     System.out.println("socket accepted");
                     executorService.execute(new Slave(socket));
@@ -47,25 +47,25 @@ public class MasterNode {
         }
     }
 
-    private class Slave implements Runnable {  
-        private Socket socket;  
-        public Slave(Socket socket) {  
-            this.socket = socket;  
+    private class Slave implements Runnable {
+        private Socket socket;
+        public Slave(Socket socket) {
+            this.socket = socket;
             System.out.println("socket connected");
-        }  
-        
-        public void run() {  
-            try {  
-                handleSocket();  
-            } catch (Exception e) {  
-                e.printStackTrace();  
-            }  
-        } 
-       
-        private void handleSocket() throws Exception {  
+        }
+
+        public void run() {
+            try {
+                handleSocket();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void handleSocket() throws Exception {
             PrintWriter writer = new PrintWriter(socket.getOutputStream());  
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer.println("Hello Slave."); 
+            writer.println("Hello Slave.");
             writer.flush();
             String temp;
             SlaveData aSlave = new SlaveData(slaveId,in,writer);
@@ -74,15 +74,15 @@ public class MasterNode {
                 slaveMap.put(aSlave.id,aSlave);
             }
             while((temp=in.readLine()) != null){
-        	    System.out.println(temp);
-        	    if(temp.equals("eof")){
+                System.out.println(temp);
+                if(temp.equals("eof")){
                     System.out.println("it is eof");
                     break;
-        	    }
+                }
             }
-           writer.close();
-           in.close();
-           socket.close();
-        }  
-    } 
+            writer.close();
+            in.close();
+            socket.close();
+        }
+    }
 }

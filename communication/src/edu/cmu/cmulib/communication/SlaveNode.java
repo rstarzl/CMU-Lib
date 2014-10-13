@@ -8,14 +8,14 @@ public class SlaveNode {
     Socket socket = null;
     PrintWriter os = null;
     BufferedReader in = null;
-    
+
     public SlaveNode(String nn) {
         mName = nn;
         System.out.println("I'm a SlaveNode - " + mName);
     }
 
     public void connect() {
-        try {        	
+        try {
             System.out.println(InetAddress.getLocalHost().getHostAddress());
             socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
             os = new PrintWriter(socket.getOutputStream());
@@ -27,7 +27,7 @@ public class SlaveNode {
             System.out.println("Could not find!");
         }
     }
-    
+
     public void send(String message){
         os.println(message);
         os.flush();
@@ -42,18 +42,18 @@ public class SlaveNode {
             System.out.println("Could not find!");
         }
     }
-    
-    
+
+
     private class SlaveService implements Runnable{
         private BufferedReader in;
-    	
+
         public SlaveService(BufferedReader in) {
             this.in = in;
-            System.out.println(this.in==null);			
+            System.out.println(this.in==null);
         }
-    	
+
         public void run(){
-        String fromMaster;
+            String fromMaster;
             try{
                 System.out.println("slave service started read from master!!!");
                 System.out.println(in.readLine());

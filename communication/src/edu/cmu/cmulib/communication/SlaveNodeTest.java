@@ -9,15 +9,15 @@ public class SlaveNodeTest {
         SlaveNode slave = new SlaveNode(args[0]);
         slave.connect();
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-    	
+
         while(true){
             String s = buffer.readLine();
             System.out.println("before send");
             slave.send(" slave send method test ");
             if(s.equals("end"))
                 break;
-    	}
+        }
         System.out.println("......end of main");
-        
+
     }
 }

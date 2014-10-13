@@ -5,7 +5,7 @@ import java.net.*;
 import java.io.*;
 
 public class MasterNodeTest {
-    public static  void main(String[] args) throws IOException {	
+    public static  void main(String[] args) throws IOException {
         MasterNode mn = new MasterNode();
         mn.startListen();
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
@@ -14,7 +14,7 @@ public class MasterNodeTest {
             System.out.println("before send");
             mn.send(1," how are u? ");
             if(s.equals("end"))
-                 break;
+                break;
         }
         System.out.println("......end of main");
     }
