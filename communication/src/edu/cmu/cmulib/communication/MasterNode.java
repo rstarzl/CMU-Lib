@@ -68,7 +68,7 @@ public class MasterNode {
             writer.println("Hello Slave.");
             writer.flush();
             String temp;
-            SlaveData aSlave = new SlaveData(slaveId,in,writer);
+            SlaveData aSlave = new SlaveData(in, writer);
             slaveId++;
             synchronized(slaveMap){
                 slaveMap.put(aSlave.id,aSlave);
