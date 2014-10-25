@@ -26,8 +26,8 @@ public class SlaveNode {
     public void connect() {
         try {
   //          System.out.println(InetAddress.getLocalHost().getHostAddress());
-   //         socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
-            socket = new Socket(this.masterAddress, this.masterPort);
+         socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
+            //socket = new Socket(this.masterAddress, this.masterPort);
             os = new PrintWriter(socket.getOutputStream());
             os.println("Hello master! - from " + mName);
             os.flush();

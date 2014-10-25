@@ -72,8 +72,8 @@ public class MasterNode {
 
         public Slave(Socket socket) throws IOException{
             this.socket = socket;
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("socket connected");
         }
 
@@ -107,6 +107,7 @@ public class MasterNode {
             writer.close();
             in.close();
             socket.close();
+            System.out.println("HHHHHHHHHHHHHHHHHHH");
         }
 
     }

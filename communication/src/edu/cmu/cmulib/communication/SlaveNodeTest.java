@@ -1,5 +1,3 @@
-package edu.cmu.cmulib.communication;
-
 import edu.cmu.cmulib.communication.*;
 
 //TODO (fyraimar) delete it
