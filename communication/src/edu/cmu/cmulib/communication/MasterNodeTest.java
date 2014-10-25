@@ -1,7 +1,6 @@
-import edu.cmu.cmulib.communication.*;
+package edu.cmu.cmulib.communication;
 
 //TODO (fyraimar) delete it
-import java.net.*;
 import java.io.*;
 
 public class MasterNodeTest {

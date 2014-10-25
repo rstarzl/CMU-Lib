@@ -1,5 +1,6 @@
 package edu.cmu.cmulib.communication;
 
+import javax.security.auth.callback.Callback;
 import java.net.*;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -13,13 +14,26 @@ public class MasterNode {
     private ExecutorService executorService;
     private ServerSocket serverSocket;
     private final int POOL_SIZE = 5;
+
+    //private SDMiddleWare middleWare;
+    private Callback middleWare;
     // contructor 
     public MasterNode() throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
         serverSocket = new ServerSocket(port);
-        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()*POOL_SIZE);
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
     }
+
+    public MasterNode(Callback aMiddleWare) throws IOException {
+        System.out.println("I'm a MasterNode!");
+        slaveMap = new HashMap<Integer, SlaveData>();
+        serverSocket = new ServerSocket(port);
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+        this.middleWare = aMiddleWare;
+    }
+
+
 
     public void startListen () throws IOException {
         new Thread(new ServerService()).start();
@@ -30,6 +44,10 @@ public class MasterNode {
         SlaveData aSlaveData = slaveMap.get(id);
         aSlaveData.out.println(message);
         aSlaveData.out.flush();
+    }
+
+    public int slaveNum(){
+        return slaveMap.size();
     }
 
     private class ServerService implements Runnable{
@@ -49,8 +67,13 @@ public class MasterNode {
 
     private class Slave implements Runnable {
         private Socket socket;
-        public Slave(Socket socket) {
+        private PrintWriter writer;
+        private BufferedReader in;
+
+        public Slave(Socket socket) throws IOException{
             this.socket = socket;
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("socket connected");
         }
 
@@ -63,8 +86,6 @@ public class MasterNode {
         }
 
         private void handleSocket() throws Exception {
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());  
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer.println("Hello Slave.");
             writer.flush();
             String temp;
@@ -74,6 +95,9 @@ public class MasterNode {
                 slaveMap.put(aSlave.id,aSlave);
             }
             while((temp=in.readLine()) != null){
+                if(!temp.equals("eof")){
+                 //  middleWare.salveReturn();
+                }
                 System.out.println(temp);
                 if(temp.equals("eof")){
                     System.out.println("it is eof");
@@ -84,5 +108,6 @@ public class MasterNode {
             in.close();
             socket.close();
         }
+
     }
 }
