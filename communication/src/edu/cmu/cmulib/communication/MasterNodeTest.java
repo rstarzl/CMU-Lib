@@ -1,7 +1,6 @@
 import edu.cmu.cmulib.communication.*;
 
 //TODO (fyraimar) delete it
-import java.net.*;
 import java.io.*;
 
 public class MasterNodeTest {
@@ -12,7 +11,7 @@ public class MasterNodeTest {
         while(true){
             String s = buffer.readLine();
             System.out.println("before send");
-            mn.send(1," how are u? ");
+            mn.send(0," how are u? ");
             if(s.equals("end"))
                 break;
         }
