@@ -6,14 +6,17 @@ import java.io.*;
 
 public class SlaveNodeTest {
     public static  void main(String[] args) throws IOException {
-        SlaveNode slave = new SlaveNode(args[0]);
-        slave.connect();
+        String address = InetAddress.getLocalHost().getHostAddress();
+        int port = 8000;
+
+        SlaveSDMiddleWare sdSlave = new SlaveSDMiddleWare();
+        sdSlave.startSlave(address, port);
+
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
 
         while(true){
             String s = buffer.readLine();
             System.out.println("before send");
-            slave.send(" slave send method test ");
             if(s.equals("end"))
                 break;
         }

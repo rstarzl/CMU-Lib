@@ -8,6 +8,7 @@ public class SlaveNode {
     Socket socket = null;
     PrintWriter os = null;
     BufferedReader in = null;
+    SlaveSDMiddleWare midd =null;
 
     private String masterAddress;
     private int masterPort;
@@ -17,9 +18,10 @@ public class SlaveNode {
         System.out.println("I'm a SlaveNode - " + mName);
     }
 
-    public SlaveNode(String masterAddress, int masterPort){
+    public SlaveNode(String masterAddress, int masterPort, SlaveSDMiddleWare myMidd){
         this.masterAddress = masterAddress;
         this.masterPort = masterPort;
+        this.midd = myMidd;
     }
 
 
@@ -71,6 +73,8 @@ public class SlaveNode {
                     // TODO: confirm if received string is complete
                     SDMessage receivedMessage = new SDMessage();
                     receivedMessage.extractMessage(fromMaster);
+                    //System.out.println("From master: " + fromMaster);
+                    midd.msgReceived(-1, fromMaster);
 
                     // Decide which operation received
                     switch (receivedMessage.opCode){
