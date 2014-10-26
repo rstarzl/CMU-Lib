@@ -79,6 +79,9 @@ public class SlaveNode {
                     // Decide which operation received
                     switch (receivedMessage.opCode){
                         case SDMacro.transferParameter:
+                            // TODO(fyraimar) replace fake implement
+                            double received = Double.parseDouble(receivedMessage.message);
+                            send(SDMessage.buildParameter(received * 2));
                             break;
                         case SDMacro.transferMatrix:
                             // compute

@@ -1,5 +1,6 @@
 package edu.cmu.cmulib.communication;
 
+import java.util.Queue;
 import java.io.IOException;
 
 /**
@@ -9,12 +10,18 @@ public class MasterSDMiddleWare implements SDMiddleWareCallBack{
     //
     private MasterNode masterNode;
 
+    public Queue<String> msgs;
+
+    public MasterSDMiddleWare(Queue<String> nq) {
+        msgs = nq;
+    }
+
     /**
      *
      * @throws IOException
      */
     public void startMaster() throws IOException{
-        masterNode = new MasterNode();
+        masterNode = new MasterNode(this);
         masterNode.startListen();
     }
 
@@ -69,6 +76,6 @@ public class MasterSDMiddleWare implements SDMiddleWareCallBack{
     }
     */
     public void msgReceived(int nodeID, String msg) {
-
+        msgs.add("From Slave: " + nodeID + "       res: " + msg);
     }
 }
