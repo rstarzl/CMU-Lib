@@ -90,7 +90,7 @@ public class MasterNode {
             writer.flush();
             String temp;
             SlaveData aSlave = new SlaveData(in, writer);
-            slaveId++;
+            aSlave.id = slaveId++;
             synchronized(slaveMap){
                 slaveMap.put(aSlave.id,aSlave);
             }
