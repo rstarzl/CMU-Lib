@@ -14,17 +14,20 @@ public class MasterNode {
     private ExecutorService executorService;
     private ServerSocket serverSocket;
     private final int POOL_SIZE = 5;
+    public MasterSDMiddleWare midd;
 
     //private SDMiddleWare middleWare;
     private Callback middleWare;
     // contructor 
-    public MasterNode() throws IOException {
+    public MasterNode(MasterSDMiddleWare nmidd) throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
         serverSocket = new ServerSocket(port);
         executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+        midd = nmidd;
     }
 
+/*
     public MasterNode(Callback aMiddleWare) throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
@@ -32,7 +35,7 @@ public class MasterNode {
         executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
         this.middleWare = aMiddleWare;
     }
-
+*/
 
 
     public void startListen () throws IOException {
@@ -94,11 +97,13 @@ public class MasterNode {
             synchronized(slaveMap){
                 slaveMap.put(aSlave.id,aSlave);
             }
+            //System.out.println("Slaveid: " + slaveMap.size());
             while((temp=in.readLine()) != null){
                 if(!temp.equals("eof")){
+                    midd.msgReceived(aSlave.id, temp);
                  //  middleWare.salveReturn();
                 }
-                System.out.println(temp);
+                //System.out.println(temp);
                 if(temp.equals("eof")){
                     System.out.println("it is eof");
                     break;
