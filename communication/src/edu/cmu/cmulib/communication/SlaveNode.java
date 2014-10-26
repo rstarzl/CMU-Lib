@@ -8,6 +8,7 @@ public class SlaveNode {
     Socket socket = null;
     PrintWriter os = null;
     BufferedReader in = null;
+    SlaveSDMiddleWare midd =null;
 
     private String masterAddress;
     private int masterPort;
@@ -17,17 +18,18 @@ public class SlaveNode {
         System.out.println("I'm a SlaveNode - " + mName);
     }
 
-    public SlaveNode(String masterAddress, int masterPort){
+    public SlaveNode(String masterAddress, int masterPort, SlaveSDMiddleWare myMidd){
         this.masterAddress = masterAddress;
         this.masterPort = masterPort;
+        this.midd = myMidd;
     }
 
 
     public void connect() {
         try {
   //          System.out.println(InetAddress.getLocalHost().getHostAddress());
-   //         socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
-            socket = new Socket(this.masterAddress, this.masterPort);
+         socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
+            //socket = new Socket(this.masterAddress, this.masterPort);
             os = new PrintWriter(socket.getOutputStream());
             os.println("Hello master! - from " + mName);
             os.flush();
@@ -71,10 +73,15 @@ public class SlaveNode {
                     // TODO: confirm if received string is complete
                     SDMessage receivedMessage = new SDMessage();
                     receivedMessage.extractMessage(fromMaster);
+                    //System.out.println("From master: " + fromMaster);
+                    midd.msgReceived(-1, fromMaster);
 
                     // Decide which operation received
                     switch (receivedMessage.opCode){
                         case SDMacro.transferParameter:
+                            // TODO(fyraimar) replace fake implement
+                            double received = Double.parseDouble(receivedMessage.message);
+                            send(SDMessage.buildParameter(received * 2));
                             break;
                         case SDMacro.transferMatrix:
                             // compute

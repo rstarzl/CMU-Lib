@@ -11,4 +11,4 @@ osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/commun
 osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/communication; ant run-slave -Dargs=\"slave2\""'
 osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/communication; ant run-slave -Dargs=\"slave3\""'
 osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/communication; ant run-slave -Dargs=\"slave4\""'
-osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/communication; ant run-slave -Dargs=\"slave5\""'
+#osascript -e 'tell app "Terminal" to do script "cd ~/Documents/wp/CMU-Lib/communication; ant run-slave -Dargs=\"slave5\""'

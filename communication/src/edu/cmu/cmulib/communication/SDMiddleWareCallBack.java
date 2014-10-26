@@ -7,6 +7,5 @@ public interface SDMiddleWareCallBack {
 
     // when a slave returns computational result,
     // MiddleWare will be notified.
-    public void salveReturn(int slaveID, int[][] matrix, int m, int n);
-
+    public void msgReceived(int nodeID, String msg);
 }
