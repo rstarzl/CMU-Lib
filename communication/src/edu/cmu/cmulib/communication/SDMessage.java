@@ -7,6 +7,7 @@ public class SDMessage {
     public int opCode;
     public String message;
     public int matrixInteger[][];
+    public double matrixDouble[][];
     public int matrixIntegerM;
     public int matrixIntegerN;
 
@@ -28,9 +29,30 @@ public class SDMessage {
                 output[i * n * 4 + j * 4 + 3] = (byte)((max[i][j] & 0xff000000) >> 24);
             }
         }
+
         String message = new String(output);
         return opCode + "\t" + m + "\t" + n + "\t" + message;
+    }
 
+    public static String buildMatrixDouble(double max[][], int m, int n){
+        int opCode = SDMacro.getTransferMatrixDOuble;
+        byte[] output = new byte[m * n * 8];
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                double temp = max[i][j];
+                long c = Double.doubleToLongBits(temp);
+                output[i * n * 8 + j * 8] = (byte)(0xff & c);
+                output[i * n * 8 + j * 8 + 1] = (byte)((byte)(c >> 8) & 0xff);
+                output[i * n * 8 + j * 8 + 2] = (byte)((c & 0xff0000) >> 16);
+                output[i * n * 8 + j * 8 + 3] = (byte)((c & 0xff000000) >> 24);
+                output[i * n * 8 + j * 8 + 4] = (byte)((c  >> 32) &  0xff);
+                output[i * n * 8 + j * 8 + 5] = (byte)((c  >> 40) &  0xff);
+                output[i * n * 8 + j * 8 + 6] = (byte)((c  >> 48) &  0xff);
+                output[i * n * 8 + j * 8 + 7] = (byte)((c  >> 56) &  0xff);
+            }
+        }
+        String message = new String(output);
+        return opCode + "\t" + m + "\t" + n + "\t" + message;
     }
 
     public void extractMessage(String message) throws Exception{
@@ -70,6 +92,44 @@ public class SDMessage {
                        temp <<= 8;
                        temp |= b4;
                        matrixInteger[i][j] = temp;
+                    }
+                }
+                break;
+            case SDMacro.getTransferMatrixDOuble:
+                if(content.length <= 4){
+                    throw new Exception("Wrong message! Double Matrix message should at least contain four elements");
+                }
+                int dm = Integer.parseInt(content[1]);
+                int dn = Integer.parseInt(content[2]);
+                matrixIntegerM = dm;
+                matrixIntegerN = dn;
+                for(int i = 0; i < dm; i++){
+                    for(int j = 0; j < dn; j++){
+                        long temp = 0;
+                        byte b1 = (byte) content[3].charAt(i * dm * 8 + j * 8);
+                        byte b2 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 1);
+                        byte b3 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 2);
+                        byte b4 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 3);
+                        byte b5 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 4);
+                        byte b6 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 5);
+                        byte b7 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 6);
+                        byte b8 = (byte) content[3].charAt(i * dm * 8 + j * 8 + 7);
+                        temp |= b1;
+                        temp <<= 8;
+                        temp |= b2;
+                        temp <<= 8;
+                        temp |= b3;
+                        temp <<= 8;
+                        temp |= b4;
+                        temp <<= 8;
+                        temp |= b5;
+                        temp <<= 8;
+                        temp |= b6;
+                        temp <<= 8;
+                        temp |= b7;
+                        temp <<= 8;
+                        temp |= b8;
+                        matrixDouble[i][j] = Double.longBitsToDouble(temp);
                     }
                 }
                 break;
