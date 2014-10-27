@@ -41,6 +41,11 @@ public class SlaveSDMiddleWare implements SDMiddleWareCallBack{
        slaveNode.send(message);
     }
 
+    public void sendMatrixDouble(double max[][], int m, int n){
+        String message = SDMessage.buildMatrixDouble(max, m, n);
+        slaveNode.send(message);
+    }
+
     public void sendParameter(double para) {
         String message = SDMessage.buildParameter(para);
         slaveNode.send(message);
