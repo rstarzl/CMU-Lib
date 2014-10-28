@@ -11,7 +11,7 @@
     </target>
 
     <target name="run-master" depends="compile">
-        <java classname="MasterNodeTest">
+        <java classname="Master">
             <arg line="${args}"/>
             <classpath>
                 <pathelement path="build/classes"/>
@@ -20,7 +20,7 @@
     </target>
 
     <target name="run-slave" depends="compile">
-        <java classname="SlaveNodeTest">
+        <java classname="Slave">
             <arg line="${args}"/>
             <classpath>
                 <pathelement path="build/classes"/>
