@@ -14,6 +14,7 @@ public class MatOp {
 		/*
 		 * Naive implementation. No optimization.
 		 */
+		/*
 		assert (src1.cols == src2.rows);
 		Mat tSrc2 = src2.t(); // transpose matrix B, this will improve Cache
 								// performance
@@ -32,6 +33,33 @@ public class MatOp {
 			}
 			dst.data[i] = sum;
 		}
+		*/
+		Mat dst = new Mat(src1.rows, src2.cols);
+		src1.inner.mult(src2.inner, dst.inner);
+		dst.data = dst.inner.getData();
+		System.out.println(dst.inner.toString());
+		
+		/*System.out.println("*****");
+		 for (int i = 0 ; i < dst.data.length; i++){
+				
+			 if (i%dst.cols == 0){
+				 System.out.println();
+			 }
+			 System.out.print(dst.data[i] + " ");
+		 }
+		 System.out.println();*/
+		/*double s1[] = {1,1,1,1};
+		double s2[] = {0,0};
+		Mat dst = new Mat(2, 1);
+			(new Mat(2,2,s1)).inner.mult((new Mat(2,1,s1)).inner,dst.inner);
+			dst.data = dst.inner.getData();
+			 for (int i =0 ; i < dst.inner.getData().length; i++){
+				 
+				 if (i%2 == 0){
+					 System.out.println();
+				 }
+				 System.out.print(dst.inner.getData()[i] + " ");
+			 }*/
 		return dst;
 	}
 
@@ -131,7 +159,14 @@ public class MatOp {
 			return sum;
 		}
 	}
+	/**
+	 * normalize vector
+	 */
 	
+	public static Mat vectorNormalize(Mat src, NormType normType){
+		double sum = norm(src, normType);
+		return src.mul(1/sum);
+	}
 	/**
 	 * Calculate distance between two vectors.
 	 * For matrix, this is equal to square root of SSE (Sum of Squared Error)
@@ -181,4 +216,6 @@ public class MatOp {
 		}
 		return sum;
 	}
+	
+	
 }
