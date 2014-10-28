@@ -1,10 +1,13 @@
 package cmu.core;
 
-public class Mat {
+import no.uib.cipr.matrix.DenseMatrix;
 
-	public int dims; // number of dimensions
+
+public class Mat {
 	public int rows, cols; // the number of rows and columns
 	public double[] data; // matrix data
+	
+	public DenseMatrix inner; // Wrapper
 
 	/**
 	 * Matrix Constructor Shallow copy of another matrix
@@ -15,8 +18,9 @@ public class Mat {
 	public Mat(Mat m) {
 		this.cols = m.cols;
 		this.rows = m.rows;
-		this.dims = m.dims;
 		this.data = m.data;
+		//
+		this.inner = m.inner;
 	}
 
 	/**
@@ -31,7 +35,8 @@ public class Mat {
 	public Mat(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
-		this.dims = 2;
+		this.inner = new DenseMatrix(rows, cols);
+		this.data = this.inner.getData();
 	}
 
 	/**
@@ -48,12 +53,14 @@ public class Mat {
 	public Mat(int rows, int cols, double[] src) {
 		this.rows = rows;
 		this.cols = cols;
-		this.dims = 2;
+
 		if (src == null || src.length == 0) {
 			this.create();
+			
 		} else {
 			assert (rows * cols == src.length);
-			this.create(src);
+			this.inner = new DenseMatrix(rows, cols, src, false);
+			this.data = this.inner.getData();
 		}
 	}
 
@@ -61,7 +68,8 @@ public class Mat {
 	 * Allocate memory for matrix
 	 */
 	public void create() {
-		this.data = new double[rows * cols];
+		//this.data = new double[rows * cols];
+		this.inner = new DenseMatrix(rows, cols);
 	}
 
 	/**
@@ -71,10 +79,12 @@ public class Mat {
 	 *            matrix initializes all elements from this array, row by row.
 	 */
 	public void create(double[] src) {
-		this.data = new double[rows * cols];
-		assert (data.length == src.length);
-		for (int i = 0; i < src.length; i++)
-			this.data[i] = src[i];
+		//this.data = new double[rows * cols];
+		//assert (data.length == src.length);
+		//for (int i = 0; i < src.length; i++)
+			//this.data[i] = src[i];
+		this.inner = new DenseMatrix(rows, cols, src, false);
+		this.data = this.inner.getData();
 	}
 
 	/**
@@ -84,20 +94,51 @@ public class Mat {
 	 * @return
 	 */
 	public Mat t() {
-		/*
+		/*/*
 		 * Slow version, no optimization
 		 */
-		Mat t = new Mat(this.cols, this.rows);
+		/*Mat t = new Mat(this.cols, this.rows);
 		t.create();
 		int idx = 0;
 		int colIdx, rowIdx;
 		for (int i = 0; i < data.length; i++) {
-			rowIdx = i / t.cols;
-			colIdx = i % t.cols;
-			idx = colIdx * t.rows + rowIdx;
+			rowIdx = i / this.cols;   //t.cols
+			colIdx = i % this.cols;	  // t.cols
+			idx = colIdx * this.rows + rowIdx;   //t.rows
 			t.data[idx] = this.data[i];
-		}
+		} */
+		Mat t = new Mat(this.cols, this.rows);
+		t.inner = (DenseMatrix) this.inner.transpose(t.inner);
+		t.data = t.inner.getData();
+		/* for (int i =0 ; i < t.inner.getData().length; i++){
+			 
+			 if (i%4 == 0){
+				 System.out.println();
+			 }
+			 System.out.print(t.inner.getData()[i] + " ");
+		 }
+ System.out.println();*/
+
 		return t;
+	}
+
+	/**
+	 * 
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public Mat colRange(int i, int j) {
+		assert(i >= 0 && j < this.cols && i <= j);
+		Mat result = new Mat(this.rows, j - i + 1);
+		
+		double[] src = new double[this.rows * (j - i + 1)];
+		for (int m = 0; m < (j-i+1) * this.rows; m++) {
+			src[m] = this.data[m + i *this.rows];
+		}
+		result.create(src);
+		result.data = result.inner.getData();
+		return result;
 	}
 
 	/**
@@ -107,9 +148,11 @@ public class Mat {
 	 * @return
 	 */
 	public Mat mul(double alpha) {
-		for (int i = 0; i < this.data.length; i++) {
+		/*for (int i = 0; i < this.data.length; i++) {
 			this.data[i] *= alpha;
-		}
+		}*/
+		this.inner = (DenseMatrix) this.inner.scale(alpha);
+		this.data = this.inner.getData();
 		return this;
 	}
 
@@ -120,7 +163,7 @@ public class Mat {
 	 * @return
 	 * @throws IllegalAccessException
 	 */
-	public double dot(Mat src) throws IllegalAccessException {
+	/*public double dot(Mat src) throws IllegalAccessException {
 		if (!this.isEmpty() && !src.isEmpty()) {
 			if (this.data.length != src.data.length) {
 				throw new IllegalAccessException("Matrices size should be same");
@@ -133,7 +176,7 @@ public class Mat {
 		} else {
 			throw new IllegalAccessException("Matrix has not been initialized");
 		}
-	}
+	}*/
 
 	/**
 	 * Check whether this matrix has elements or not.
@@ -184,6 +227,6 @@ public class Mat {
 	 * @return A new matrix which is identical to the orginal one.
 	 */
 	public Mat clone() {
-		return new Mat(this.rows, this.cols, this.data);
+		return new Mat(this.rows, this.cols, this.data.clone());
 	}
 }
