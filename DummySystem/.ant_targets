@@ -1,0 +1,6 @@
+    clean
+    compile-communication
+    package-communication
+    compile
+    run-master
+    run-slave

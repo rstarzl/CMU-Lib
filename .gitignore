@@ -1,6 +1,8 @@
 .DS_Store
 communication/build/
+CoolMatrixUtility/build
 *.swp
+*.class
 
 *.xml
 
