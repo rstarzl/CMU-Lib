@@ -14,12 +14,12 @@ public class MasterNode {
     private ExecutorService executorService;
     private ServerSocket serverSocket;
     private final int POOL_SIZE = 5;
-    public MasterSDMiddleWare midd;
+    public MiddleWare midd;
 
     //private SDMiddleWare middleWare;
     private Callback middleWare;
     // contructor 
-    public MasterNode(MasterSDMiddleWare nmidd) throws IOException {
+    public MasterNode(MiddleWare nmidd) throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
         serverSocket = new ServerSocket(port);

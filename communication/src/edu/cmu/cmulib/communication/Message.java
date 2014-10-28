@@ -3,7 +3,7 @@ package edu.cmu.cmulib.communication;
 /**
  * Created by amaliujia on 14-10-16.
  */
-public class SDMessage {
+public class Message {
     public int opCode;
     public String message;
     public int matrixInteger[][];
@@ -11,15 +11,23 @@ public class SDMessage {
     public int matrixIntegerM;
     public int matrixIntegerN;
 
+    public Message(String msg) {
+        try {
+            extractMessage(msg);
+        }
+        catch (Exception ex) {
+        }
+    }
+
     public static String buildParameter(double parameter){
         String parameterString = String.valueOf(parameter);
         int opCode;
-        opCode = SDMacro.transferParameter;
+        opCode = Macro.transferParameter;
         return opCode + "\t" + parameterString;
     }
 
     public static String buildMatrix(int max[][], int m, int n){
-        int opCode = SDMacro.transferMatrix;
+        int opCode = Macro.transferMatrix;
         byte[] output = new byte[m * n * 4];
         for(int i = 0; i < m; i++){
             for(int j = 0; j < n; j++){
@@ -35,7 +43,7 @@ public class SDMessage {
     }
 
     public static String buildMatrixDouble(double max[][], int m, int n){
-        int opCode = SDMacro.getTransferMatrixDOuble;
+        int opCode = Macro.getTransferMatrixDOuble;
         byte[] output = new byte[m * n * 8];
         for(int i = 0; i < m; i++){
             for(int j = 0; j < n; j++){
@@ -63,13 +71,13 @@ public class SDMessage {
         this.opCode = Integer.parseInt(content[0]);
 
         switch (this.opCode){
-            case SDMacro.transferParameter:
+            case Macro.transferParameter:
                 if(content.length <= 1){
                     throw new Exception("Wrong message! Parameter message should at least contain two elements");
                 }
                 this.message = content[1];
                 break;
-            case SDMacro.transferMatrix:
+            case Macro.transferMatrix:
                 if(content.length <= 4){
                     throw new Exception("Wrong message! Matrix message should at least contain four elements");
                 }
@@ -95,7 +103,7 @@ public class SDMessage {
                     }
                 }
                 break;
-            case SDMacro.getTransferMatrixDOuble:
+            case Macro.getTransferMatrixDOuble:
                 if(content.length <= 4){
                     throw new Exception("Wrong message! Double Matrix message should at least contain four elements");
                 }
