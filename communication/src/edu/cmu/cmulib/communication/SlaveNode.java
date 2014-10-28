@@ -8,7 +8,7 @@ public class SlaveNode {
     Socket socket = null;
     PrintWriter os = null;
     BufferedReader in = null;
-    SlaveSDMiddleWare midd =null;
+    MiddleWare midd =null;
 
     private String masterAddress;
     private int masterPort;
@@ -18,7 +18,7 @@ public class SlaveNode {
         System.out.println("I'm a SlaveNode - " + mName);
     }
 
-    public SlaveNode(String masterAddress, int masterPort, SlaveSDMiddleWare myMidd){
+    public SlaveNode(String masterAddress, int masterPort, MiddleWare myMidd){
         this.masterAddress = masterAddress;
         this.masterPort = masterPort;
         this.midd = myMidd;
@@ -28,7 +28,7 @@ public class SlaveNode {
     public void connect() {
         try {
   //          System.out.println(InetAddress.getLocalHost().getHostAddress());
-         socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
+            socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
             //socket = new Socket(this.masterAddress, this.masterPort);
             os = new PrintWriter(socket.getOutputStream());
             os.println("Hello master! - from " + mName);
@@ -71,23 +71,22 @@ public class SlaveNode {
                 System.out.println(in.readLine());
                 while((fromMaster=in.readLine())!=null){
                     // TODO: confirm if received string is complete
-                    SDMessage receivedMessage = new SDMessage();
-                    receivedMessage.extractMessage(fromMaster);
+                    Message receivedMessage = new Message(fromMaster);
                     //System.out.println("From master: " + fromMaster);
                     midd.msgReceived(-1, fromMaster);
 
                     // Decide which operation received
                     switch (receivedMessage.opCode){
-                        case SDMacro.transferParameter:
+                        case Macro.transferParameter:
                             // TODO(fyraimar) replace fake implement
-                            double received = Double.parseDouble(receivedMessage.message);
-                            send(SDMessage.buildParameter(received * 2));
+                            //double received = Double.parseDouble(receivedMessage.message);
+                            //send(Message.buildParameter(received * 2));
                             break;
-                        case SDMacro.transferMatrix:
+                        case Macro.transferMatrix:
                             // compute
 
                             //assume computation complete
-                            send(SDMessage.buildMatrix(receivedMessage.matrixInteger,
+                            send(Message.buildMatrix(receivedMessage.matrixInteger,
                                                     receivedMessage.matrixIntegerM,
                                                     receivedMessage.matrixIntegerN));
                             break;
