@@ -1,117 +1,119 @@
 package edu.cmu.cmulib.communication;
 
+import javax.security.auth.callback.Callback;
 import java.net.*;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.io.*;
 
 public class MasterNode {
-	HashMap<Integer, SlaveData> slaveMap;
-	int slaveId=1;
-	// contructor 
-    public MasterNode() {
+    HashMap<Integer, SlaveData> slaveMap;
+    int slaveId=1;
+    private int port = 8000;
+    private ExecutorService executorService;
+    private ServerSocket serverSocket;
+    private final int POOL_SIZE = 5;
+    public MiddleWare midd;
+
+    //private SDMiddleWare middleWare;
+    private Callback middleWare;
+    // contructor 
+    public MasterNode(MiddleWare nmidd) throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
+        serverSocket = new ServerSocket(port);
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+        midd = nmidd;
     }
 
-    public void startListen (int portNum) throws IOException {
-    	ServerService server = new ServerService(portNum);
-    	server.start();
-    	
-    	BufferedReader input = new BufferedReader(new InputStreamReader(
-				System.in));
-    	String pattern = "^[0-9]*[1-9][0-9]*$";
-    	String temp = "";
-    	while(true){
-    		System.out.print("::: ");
-        	temp = input.readLine();
-        	
-        	if(temp.equals("quit"))
-        		break;
-        	
-        	if(temp.equals(""))
-        		continue;
-        	String[] arr = temp.split(" ");
-        	if(!arr[0].matches(pattern)){
-        		System.out.println("*******************************************************\nWrong slaveID\n*******************************************************");
-        		continue;
-        	}
-        	SlaveData aSlave = slaveMap.get(Integer.parseInt(arr[0]));
-        	if((aSlave==null)||(arr.length<2))
-        		System.out.println("*******************************************************\nInvalid slave ID or wrong argument format\nArgument: slaveId sentence\n*******************************************************");
-        	else{
-        		aSlave.out.println(arr[1]);        	
-        		aSlave.out.flush();
-        	}
+/*
+    public MasterNode(Callback aMiddleWare) throws IOException {
+        System.out.println("I'm a MasterNode!");
+        slaveMap = new HashMap<Integer, SlaveData>();
+        serverSocket = new ServerSocket(port);
+        executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+        this.middleWare = aMiddleWare;
+    }
+*/
+
+
+    public void startListen () throws IOException {
+        new Thread(new ServerService()).start();
+        System.out.println("why!!!!??????!");
+    }
+
+    public void send(int id, String message){
+        SlaveData aSlaveData = slaveMap.get(id);
+        aSlaveData.out.println(message);
+        aSlaveData.out.flush();
+    }
+
+    public int slaveNum(){
+        return slaveMap.size();
+    }
+
+    private class ServerService implements Runnable{
+        public void run(){
+            while(true){
+                Socket socket = null;
+                try {
+                    socket = serverSocket.accept();
+                    System.out.println("socket accepted");
+                    executorService.execute(new Slave(socket));
+                }catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
         }
-    	System.exit(1);
-    }
-    
-    
-    private class ServerService extends Thread{
-    	private ServerSocket socketListener = null;
-    	public ServerService(int portNum) {
-			try {
-				socketListener = new ServerSocket (portNum);
-			} catch (IOException e) {
-				System.err.println("Fail to open socket of server.");
-			}
-		}
-    	public void run(){
-    		while(true){
-    			try {    				
-    
-    				Socket socket = null;
-    				
-    				while (true) {
-    				socket = socketListener.accept();
-                    new Thread(new Slave(socket)).start();
-    				}
-
-       			}catch (Exception e) {
-       				System.out.println(e);
-       			}
-    		}
-    	}
     }
 
-    private class Slave implements Runnable {  
-    
-       private Socket socket;  
-         
-       public Slave(Socket socket) {  
-          this.socket = socket;  
-          System.out.println("socket connected~~~~~~~~~~");
-       }  
-         
-       public void run() {  
-          try {  
-             handleSocket();  
-          } catch (Exception e) {  
-             e.printStackTrace();  
-          }  
-       } 
-       
-       private void handleSocket() throws Exception {  
-    	   PrintWriter writer = new PrintWriter(socket.getOutputStream());  
-           BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-           writer.println("Hello Slave."); 
-           writer.flush();
-           String temp;
-           SlaveData aSlave = new SlaveData(slaveId,in,writer);
-           slaveId++;
-           
-           synchronized(slaveMap){
-        	   slaveMap.put(aSlave.id,aSlave);
-           }
-           
-           while((temp=in.readLine()) != null){
-        	   System.out.println(temp);
-        	   
-        	   if(temp.equals("eof")){
-        		   System.out.println("it is eof");
-        		   break;
-        	   }
-           }
-       }  
-    } 
+    private class Slave implements Runnable {
+        private Socket socket;
+        private PrintWriter writer;
+        private BufferedReader in;
+
+        public Slave(Socket socket) throws IOException{
+            this.socket = socket;
+            writer = new PrintWriter(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println("socket connected");
+        }
+
+        public void run() {
+            try {
+                handleSocket();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void handleSocket() throws Exception {
+            writer.println("Hello Slave.");
+            writer.flush();
+            String temp;
+            SlaveData aSlave = new SlaveData(in, writer);
+            aSlave.id = slaveId++;
+            synchronized(slaveMap){
+                slaveMap.put(aSlave.id,aSlave);
+            }
+            //System.out.println("Slaveid: " + slaveMap.size());
+            while((temp=in.readLine()) != null){
+                if(!temp.equals("eof")){
+                    midd.msgReceived(aSlave.id, temp);
+                 //  middleWare.salveReturn();
+                }
+                //System.out.println(temp);
+                if(temp.equals("eof")){
+                    System.out.println("it is eof");
+                    break;
+                }
+            }
+            writer.close();
+            in.close();
+            socket.close();
+            System.out.println("HHHHHHHHHHHHHHHHHHH");
+        }
+
+    }
 }
