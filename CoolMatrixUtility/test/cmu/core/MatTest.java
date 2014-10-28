@@ -51,6 +51,19 @@ public class MatTest {
     	 org.junit.Assert.assertArrayEquals("transpose failure on 2*2 matrix", expected, m.data, 0.00001);
     }
     
+    @Test
+    public void TestTransPose_2by3() {
+    	double[] data = new double[6];
+    	for (int i = 0; i < 6; i++) {
+    		data[i] = i + 1;
+    	}
+    	Mat mat = new Mat(2, 3, data);
+    	Mat m = mat.t();
+    	double[] expected = 
+    		   {1,3,5,2,4,6};
+    	 org.junit.Assert.assertArrayEquals("transpose failure on 2*3 matrix", expected, m.data, 0.00001);
+    }
+    
 	/*
 	 * isEmpty Test
 	 */
@@ -96,5 +109,15 @@ public class MatTest {
     	double[] expected = 
     		   {2, 4, 6, 8};
     	 org.junit.Assert.assertArrayEquals("mul failure on 2*2 matrix", expected, m.data, 0.00001);
+    }
+    
+    @Test
+    public void TestColRange() {
+      	double[] data = {1,2,3,4,5,6,7,8,9,10,11,12};
+    	Mat mat = new Mat(3, 4, data);
+    	Mat m = mat.colRange(1,2);
+    	double[] expected = 
+    		   {4,5,6,7,8,9};
+    	org.junit.Assert.assertArrayEquals("colRange failure", expected, m.data, 0.00001);
     }
 }
