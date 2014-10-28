@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cmulib-commu">
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac target="1.6" srcdir="src" destdir="build/classes">
+            <classpath>
+                <pathelement path="jar/mtj-1.0.2-SNAPSHOT.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="run-master" depends="compile">
+        <java classname="Master">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+                <pathelement path="jar/mtj-1.0.2-SNAPSHOT.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-slave" depends="compile">
+        <java classname="Slave">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+                <pathelement path="jar/mtj-1.0.2-SNAPSHOT.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+</project>
+
