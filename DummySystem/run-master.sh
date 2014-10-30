@@ -1,3 +1,2 @@
-#!/bin/bash
-
-ant run-master -Dargs="192.168.1.1 8000"
+cd /Users/yiranfei/Documents/wp/CMU-Lib/DummySystem
+ant run-master

@@ -53,7 +53,7 @@ public class Master {
 
         while (a[0] + a[1] + a[2] + a[3] < 100.0) {
             int remain = 4;
-            while (commu.slaveNum() != slaveNum) {System.out.print(commu.slaveNum());}
+            while (commu.slaveNum() != 4) {System.out.print(commu.slaveNum());}
             System.out.println("\n");
 
             for (int i = 1; i <= slaveNum; i++) {
