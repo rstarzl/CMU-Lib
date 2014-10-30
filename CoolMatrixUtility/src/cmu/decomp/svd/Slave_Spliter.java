@@ -68,8 +68,8 @@ public class Slave_Spliter implements Spliter {
 	 *            object of Master_Spliter, receive the index from master
 	 */
 	public boolean receive () {
-		this.currBegin = this.master.currBegin;
-		this.currEnd = this.master.currEnd;
+		//this.currBegin = this.master.currBegin;
+		//this.currEnd = this.master.currEnd;
 		return false;
 	}
 	/**
