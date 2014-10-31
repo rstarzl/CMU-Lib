@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.LinkedList;
+
+import edu.cmu.cmulib.communication.CommonPacket;
 
 public class Slave {
 	public int SlaveId;
@@ -17,10 +20,17 @@ public class Slave {
 		this.workspan = workspan;
 	}
 	
+	public static void printArray(double[] arr){
+		for(double i: arr)
+			System.out.print(i+" ");
+		System.out.println();
+	}
+	
 	public static void main (String[] args) throws IOException {
 		double[] test = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 		int rows = 4;
 		int cols = 4;
+		LinkedList<Double[]> mList = new LinkedList<Double[]>();
         /*
 		Mat score = new Mat(rows, cols ,test);
 		Tag tag;
@@ -31,6 +41,7 @@ public class Slave {
         int port = 8000;
 
         SlaveMiddleWare sdSlave = new SlaveMiddleWare();
+        sdSlave.register(Double[].class, mList);
         System.out.println(address + " " + port);
         sdSlave.startSlave(address, port);
 
@@ -48,16 +59,46 @@ public class Slave {
 		commu.push(L);
 		*/
 
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-
         while(true){
-            synchronized (sdSlave.msgs) {
-                if (sdSlave.msgs.size() > 0) {
-                    sdSlave.sendParameter(sdSlave.msgs.peek().para * 2);
-                    sdSlave.msgs.remove();
+        	synchronized (mList) {
+                if (mList.size() > 0) {
+                	System.out.println("enter slvae synchronized");           
+                    Mat n = getMat(mList);
+                	printArray(n.data);
+                	sendMat(n.mul(2),sdSlave);               	
+                	
                 }
             }
+
         }
+	}
+	
+	
+	public static Mat getMat(LinkedList<Double[]> mList){
+		Double [] temp = mList.peek();
+    	double row = temp[0];
+    	double col = temp[1];
+    	double [] arr = new double[temp.length-2];
+    	for(int k=0;k<arr.length;k++){
+    		arr[k] = temp[k+2];
+    	}
+    	Mat mat = new Mat((int)row,(int)col,arr);    	
+        mList.remove();
+        return mat;
+		
+	}
+	
+	public static void sendMat(Mat mat,SlaveMiddleWare m){
+		Double [] array = new Double[mat.data.length+2];
+	    array[0] = Double.valueOf(mat.rows);
+	    array[1] = Double.valueOf(mat.cols);
+	    
+	    for(int k=0; k<mat.data.length;k++)
+	    	array[k+2] = Double.valueOf(mat.data[k]);
+        CommonPacket packet = new CommonPacket(-1, array);
+        
+        m.sendPacket(packet);
+		
 	}
 	
 }
