@@ -34,6 +34,7 @@ public class Slave_SVD {
 		 }
 		 
 		   return this.L;*/
+		 /*
 		 System.out.println("L: " + L.data[0] + "  " + L.data[1]);
 		 for (int i = 0 ; i < src.data.length; i++){
 				
@@ -52,8 +53,14 @@ public class Slave_SVD {
 			 System.out.print(t.data[i] + " ");
 		 }
 		 System.out.println();
+		 */
 		// Mat newL =  new Mat(MatOp.gemm(src, src.stransLmul(src.clone(), this.L)));
-		  this.L = MatOp.gemm(src, MatOp.gemm(src.t(), this.L));
+//		System.out.println("L before SVD");
+//		this.L.display(); 
+//		Mat temp = MatOp.gemm(src.t(), this.L);
+//		System.out.println("S traspose mul L");
+//		temp.display();
+		 this.L = MatOp.gemm(src, MatOp.gemm(src.t(), this.L));
 //		  System.out.println("L: " + L.data[0] + "  " + L.data[1]);
 		 return this.L;
 	 }

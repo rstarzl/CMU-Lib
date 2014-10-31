@@ -37,7 +37,8 @@ public class Slave_getSplitedMatrix {
 	public Mat construct(){
 		int begin = this.tag.getBegin();
 		int end = this.tag.getEnd();
-		System.out.println(begin +"   " + end);
+//		System.out.println(begin +"   " + end);
+		/*
 		int cols = end - begin + 1;
 		int rows = this.src.rows;
 		Mat temp = new Mat(rows, cols);
@@ -48,6 +49,17 @@ public class Slave_getSplitedMatrix {
 			temp.data[j] = this.src.data[begin + r * rows + c];
 		}
 		return temp;
+		*/
+		Mat temp = this.src.colRange(begin, end);
+		
+		/*
+		 * test
+		 * 		System.out.println("after splitted");
+		 * System.out.println("splited rows:  " + temp.rows + "splited cols:  " + temp.cols);
+		 * temp.display();
+		 * 
+		 */
+		return temp;
 	}
-	
+
 }

@@ -14,16 +14,64 @@ public class Master {
 		public static void main (String[] args) throws IOException {
 		int slaveNum = 4;
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
-        /*
-		Mat score = new Mat(rows, cols ,test);
-		Tag tag;
-		Mat Like, slaveL;
-        */
+
+
+            
+        double[] test = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+        int rows = 4;
+        int cols = 4;
+        Mat score = new Mat(rows, cols ,test);
+        Tag tag;
+        Mat Like, slaveL;
+            
         MasterMiddleWare commu = new MasterMiddleWare();
         commu.register(Double[].class,mList);
         commu.startMaster();
+            
+            
+        Master_Spliter split = new Master_Spliter(score, slaveNum);
+        Master_SVD svd = new Master_SVD(score, slaveNum);
+        //System.out.println(commu.slaveNum);
+        while(commu.slaveNum()<slaveNum){System.out.println(commu.slaveNum());}
+        Like = svd.initL();
+        slaveL = null;
+                      //  System.out.println("#######******#*#*#*#*##*#*#*#");
+        do {
+            int remain = slaveNum;
+          //  System.out.println("#######******#*#*#*#*##*#*#*#");
+            svd.setL(Like);
+            printArray(Like.data);
+                //commu.push(Like);
+          //  double [] a = {1.1, 2.2, 3.3, 4.4};
+            for (int i = 1; i <= slaveNum; i++){
+            //    Mat mat = new Mat(4,1,a);
+              //  sendMat(mat,i,commu);
+                sendMat(Like,i,commu);
+             }
+                ArrayList<Tag> index = split.split();
+                for(int i = 0; i < index.size(); i++) {
+                    tag = index.get(i);
+                    CommonPacket packet = new CommonPacket(-1,tag);
+                    commu.sendPacket(i+1, packet);
+                }
+            
+              while (remain > 0) {
+                synchronized (mList) {
+                    if (mList.size() > 0) {
+                        slaveL = getMat(mList);
+                        svd.update_SVD(slaveL);
+                        remain--;
+                    }
+                }
+              }
+                    
+            Like = svd.getUpdateL();
+            MatOp.vectorNormalize(Like, MatOp.NormType.NORM_L2);
+        } while (!svd.isPerformed(Like));
+        System.out.println("final  ");
+        printArray(Like.data);
         
-       
+        /*
         System.out.println("PPPPPPPPPPPPPPPP");
         double [] a = {1.1, 2.2, 3.3, 4.4};
         int count =0;
@@ -50,6 +98,7 @@ public class Master {
             }
             System.out.println(a[0]+" "+a[1]+" "+a[2]+" "+a[3]);
         }
+        */
         /*
 		Master_Spliter split = new Master_Spliter(score, slaveNum);
 		Master_SVD svd = new Master_SVD(score, slaveNum);

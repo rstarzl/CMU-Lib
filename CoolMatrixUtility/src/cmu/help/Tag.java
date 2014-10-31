@@ -1,6 +1,8 @@
 package cmu.help;
 
-public class Tag {
+import java.io.Serializable;
+
+public class Tag implements Serializable{
 	public int begin;
 	public int end;
 	

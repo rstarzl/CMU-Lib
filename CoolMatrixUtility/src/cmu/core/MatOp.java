@@ -37,7 +37,7 @@ public class MatOp {
 		Mat dst = new Mat(src1.rows, src2.cols);
 		src1.inner.mult(src2.inner, dst.inner);
 		dst.data = dst.inner.getData();
-		System.out.println(dst.inner.toString());
+//		System.out.println(dst.inner.toString());
 		
 		/*System.out.println("*****");
 		 for (int i = 0 ; i < dst.data.length; i++){

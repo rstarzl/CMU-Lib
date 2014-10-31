@@ -31,34 +31,59 @@ public class Slave {
 		int rows = 4;
 		int cols = 4;
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
-        /*
+        LinkedList<Tag> tagList = new LinkedList<Tag>();
+        
 		Mat score = new Mat(rows, cols ,test);
-		Tag tag;
+		//Tag tag = new Tag(0,cols-1);    //for test
 		Mat S, L;
-        */
+        
 
         String address = InetAddress.getLocalHost().getHostAddress();
         int port = 8000;
-
         SlaveMiddleWare sdSlave = new SlaveMiddleWare();
         sdSlave.register(Double[].class, mList);
+        sdSlave.register(Tag.class, tagList);
         System.out.println(address + " " + port);
         sdSlave.startSlave(address, port);
 
-        /*
+        
 		Slave_getSplitedMatrix split = new Slave_getSplitedMatrix(score);
 		Slave_SVD svd = new Slave_SVD();
-		
-		tag = commu.pullTag();
-		split.setTag(tag);
-		S = split.construct();
-//		svd.setS(S);
-		L = commu.pullL();
-		svd.setL(L);
-		L = svd.Slave_UpdateL(S);
-		commu.push(L);
-		*/
 
+        while(true){
+            synchronized (tagList) {
+                if (tagList.size() > 0) {
+                    split.setTag(tagList.peek());
+                    tagList.remove();
+                    S = split.construct();
+                    L = svd.Slave_UpdateL(S);
+                    printArray(L.data);
+                    sendMat(L,sdSlave);
+
+                }
+            }
+            synchronized (mList) {
+                if (mList.size() > 0) {
+                    System.out.println("enter slave synchronized");
+                    L = getMat(mList);
+                    svd.setL(L);
+
+                    
+                }
+            }
+            
+        }
+//		tag = commu.pullTag();
+//		split.setTag(tag);
+//		S = split.construct();
+//		svd.setS(S);
+//		L = commu.pullL();
+//		svd.setL(L);
+//		L = svd.Slave_UpdateL(S);
+//		commu.push(L);
+		
+
+        /*
         while(true){
         	synchronized (mList) {
                 if (mList.size() > 0) {
@@ -71,6 +96,7 @@ public class Slave {
             }
 
         }
+        */
 	}
 	
 	
