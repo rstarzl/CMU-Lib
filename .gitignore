@@ -4,8 +4,6 @@ CoolMatrixUtility/build
 *.swp
 *.class
 
-*.xml
-
 communication/src/edu/cmu/cmulib/.DS_Store
 
 communication/src/edu/cmu/.DS_Store
