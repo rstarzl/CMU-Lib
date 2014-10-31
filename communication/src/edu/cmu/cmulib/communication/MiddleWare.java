@@ -7,5 +7,5 @@ public interface MiddleWare {
 
     // when a slave returns computational result,
     // MiddleWare will be notified.
-    public void msgReceived(int nodeID, String msg);
+    public void msgReceived(int nodeID, CommonPacket packet);
 }

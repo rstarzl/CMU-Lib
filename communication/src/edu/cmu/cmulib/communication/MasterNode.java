@@ -1,6 +1,7 @@
 package edu.cmu.cmulib.communication;
 
 import javax.security.auth.callback.Callback;
+
 import java.net.*;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -43,10 +44,21 @@ public class MasterNode {
         System.out.println("why!!!!??????!");
     }
 
-    public void send(int id, String message){
+    public void sendObject(int id, CommonPacket packet){
         SlaveData aSlaveData = slaveMap.get(id);
-        aSlaveData.out.println(message);
-        aSlaveData.out.flush();
+        try {
+			aSlaveData.oos.writeObject(packet);
+		} catch (IOException e1) {
+			System.out.println("cannot write packet");
+			e1.printStackTrace();
+		}
+        
+        try {
+			aSlaveData.oos.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public int slaveNum(){
@@ -70,13 +82,23 @@ public class MasterNode {
 
     private class Slave implements Runnable {
         private Socket socket;
-        private PrintWriter writer;
-        private BufferedReader in;
+        private ObjectOutputStream oos;
+        private ObjectInputStream ois;
 
-        public Slave(Socket socket) throws IOException{
+        public Slave(Socket socket){
             this.socket = socket;
-            writer = new PrintWriter(socket.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            try {
+				oos = new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException e) {
+				System.out.println("fail to get object ouput stream");
+				e.printStackTrace();
+			}
+            try {            
+				ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			} catch (IOException e) {
+				System.out.println("fail to get object input stream");
+				e.printStackTrace();
+			}
             System.out.println("socket connected");
         }
 
@@ -89,28 +111,25 @@ public class MasterNode {
         }
 
         private void handleSocket() throws Exception {
-            writer.println("Hello Slave.");
-            writer.flush();
-            String temp;
-            SlaveData aSlave = new SlaveData(in, writer);
+            String temp="";
+            SlaveData aSlave = new SlaveData(ois, oos);
             aSlave.id = slaveId++;
             synchronized(slaveMap){
                 slaveMap.put(aSlave.id,aSlave);
             }
             //System.out.println("Slaveid: " + slaveMap.size());
-            while((temp=in.readLine()) != null){
-                if(!temp.equals("eof")){
-                    midd.msgReceived(aSlave.id, temp);
+            while(true){
+            	CommonPacket packet = (CommonPacket) ois.readObject();
+                midd.msgReceived(aSlave.id,packet );
                  //  middleWare.salveReturn();
-                }
                 //System.out.println(temp);
                 if(temp.equals("eof")){
                     System.out.println("it is eof");
                     break;
                 }
             }
-            writer.close();
-            in.close();
+            oos.close();
+            ois.close();
             socket.close();
             System.out.println("HHHHHHHHHHHHHHHHHHH");
         }

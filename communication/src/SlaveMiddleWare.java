@@ -9,7 +9,9 @@ public class SlaveMiddleWare implements MiddleWare {
     //
     private SlaveNode slaveNode;
 
-    public Queue<MsgItem> msgs;
+    public Queue<CommonPacket> packets;
+    
+    public PacketHandler packetHandler;
 
     public class MsgItem {
         public int opId;
@@ -32,14 +34,19 @@ public class SlaveMiddleWare implements MiddleWare {
     }
 
     public SlaveMiddleWare() {
-        msgs = new LinkedList<MsgItem>();
+    	packets = new LinkedList<CommonPacket>();
+    	packetHandler = new PacketHandler();
     }
 
     public void startSlave(String address, int port) throws IOException{
         slaveNode = new SlaveNode(address, port, this);
         slaveNode.connect();
     }
-
+    
+    public void register(Class<?> clazz, Queue list){
+		packetHandler.register(clazz, list);
+	}
+    /*
     public void sendMatrix(DummyMatrix matrix){
         slaveNode.send(matrix.getMatrix());
     }
@@ -57,10 +64,23 @@ public class SlaveMiddleWare implements MiddleWare {
     public void sendParameter(double para) {
         String message = Message.buildParameter(para);
         slaveNode.send(message);
+    }*/
+    
+    public void sendPacket(CommonPacket packet){
+    	slaveNode.send(packet);
     }
 
-    public void msgReceived(int nodeID, String msg) {
-        Message toAdd = new Message(msg);
+    public void msgReceived(int nodeID, CommonPacket packet) {
+    	synchronized (packets) {
+            packets.add(packet);
+        }
+    	
+    	synchronized(packetHandler){
+    	    packetHandler.handlePacket(packet.getObject());
+    	}
+    	
+    	
+       /* Message toAdd = new Message(msg);
 
         switch (toAdd.opCode) {
             /*
@@ -81,7 +101,7 @@ public class SlaveMiddleWare implements MiddleWare {
                     msgs.add(item);
                 }
                 break;
-                */
+                
 
             case Macro.transferParameter:
                 MsgItem para = new MsgItem(nodeID, toAdd.opCode, Double.parseDouble(toAdd.message));
@@ -89,8 +109,8 @@ public class SlaveMiddleWare implements MiddleWare {
                     msgs.add(para);
                 }
                 break;
-        }
+        } */
 
-        System.out.println("From :" + nodeID + "    " + msg);
+        System.out.println("on recieved");
     }
 }
