@@ -27,15 +27,16 @@ public class Slave {
 	}
 	
 	public static void main (String[] args) throws IOException {
-		double[] test = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-		int rows = 4;
+        
+        // initialize original matrix
+		double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
+		int rows = 8;
 		int cols = 4;
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
         LinkedList<Tag> tagList = new LinkedList<Tag>();
         
 		Mat score = new Mat(rows, cols ,test);
-		//Tag tag = new Tag(0,cols-1);    //for test
-		Mat S, L;
+        Mat S, L;
         
 
         String address = InetAddress.getLocalHost().getHostAddress();
@@ -50,7 +51,9 @@ public class Slave {
 		Slave_getSplitedMatrix split = new Slave_getSplitedMatrix(score);
 		Slave_SVD svd = new Slave_SVD();
 
+        // update L using equation L=SS(trans)L
         while(true){
+            //receive tag and compute L
             synchronized (tagList) {
                 if (tagList.size() > 0) {
                     split.setTag(tagList.peek());
@@ -62,6 +65,7 @@ public class Slave {
 
                 }
             }
+            //receive L
             synchronized (mList) {
                 if (mList.size() > 0) {
                     System.out.println("enter slave synchronized");

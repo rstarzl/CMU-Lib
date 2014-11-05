@@ -9,16 +9,17 @@ import java.io.IOException;
 
 import edu.cmu.cmulib.communication.CommonPacket;
 
+
 public class Master {
 
 		public static void main (String[] args) throws IOException {
+        // 4 slaves assumed
 		int slaveNum = 4;
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
 
-
-            
-        double[] test = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-        int rows = 4;
+        // initialize original matrix
+        double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
+        int rows = 8;
         int cols = 4;
         Mat score = new Mat(rows, cols ,test);
         Tag tag;
@@ -31,30 +32,27 @@ public class Master {
             
         Master_Spliter split = new Master_Spliter(score, slaveNum);
         Master_SVD svd = new Master_SVD(score, slaveNum);
-        //System.out.println(commu.slaveNum);
         while(commu.slaveNum()<slaveNum){System.out.println(commu.slaveNum());}
         Like = svd.initL();
         slaveL = null;
-                      //  System.out.println("#######******#*#*#*#*##*#*#*#");
+         
+        // compute the first eigenvector iterately
         do {
             int remain = slaveNum;
-          //  System.out.println("#######******#*#*#*#*##*#*#*#");
             svd.setL(Like);
             printArray(Like.data);
-                //commu.push(Like);
-          //  double [] a = {1.1, 2.2, 3.3, 4.4};
+            // send L
             for (int i = 1; i <= slaveNum; i++){
-            //    Mat mat = new Mat(4,1,a);
-              //  sendMat(mat,i,commu);
                 sendMat(Like,i,commu);
              }
+            //send Tag
                 ArrayList<Tag> index = split.split();
                 for(int i = 0; i < index.size(); i++) {
                     tag = index.get(i);
                     CommonPacket packet = new CommonPacket(-1,tag);
                     commu.sendPacket(i+1, packet);
                 }
-            
+            // receive L and update
               while (remain > 0) {
                 synchronized (mList) {
                     if (mList.size() > 0) {
@@ -67,7 +65,7 @@ public class Master {
                     
             Like = svd.getUpdateL();
             MatOp.vectorNormalize(Like, MatOp.NormType.NORM_L2);
-        } while (!svd.isPerformed(Like));
+        } while (!svd.isPerformed(Like));     //termination of iteration
         System.out.println("final  ");
         printArray(Like.data);
         
