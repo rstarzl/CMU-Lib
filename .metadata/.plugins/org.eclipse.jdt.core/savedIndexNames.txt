@@ -1,0 +1,11 @@
+INDEX VERSION 1.127+/Users/manfred/Documents/Capstone_Project/CMU-Lib/.metadata/.plugins/org.eclipse.jdt.core
+1616145432.index
+3435298984.index
+3328177015.index
+1170098926.index
+541072417.index
+1288663406.index
+2642854772.index
+3336519950.index
+2662323867.index
+3163571840.index

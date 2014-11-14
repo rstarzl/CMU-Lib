@@ -29,17 +29,24 @@ public class MasterMiddleWare implements MiddleWare {
     //
     private MasterNode masterNode;
 
-    public Queue<MsgItem> msgs;
-
+    public Queue<CommonPacket> packets;
+    
+    public PacketHandler packetHandler;
+    
+    public void register(Class<?> clazz, Queue list){
+		packetHandler.register(clazz, list);
+	}
+    
     public MasterMiddleWare() {
-        msgs = new LinkedList<MsgItem>();
+    	packets = new LinkedList<CommonPacket>();
+    	packetHandler = new PacketHandler();
     }
 
     public void startMaster() throws IOException{
         masterNode = new MasterNode(this);
         masterNode.startListen();
     }
-
+/*
     public void sendMatrix(int slaveId, DummyMatrix matrix){
         masterNode.send(slaveId, matrix.getMatrix());
     }
@@ -58,6 +65,10 @@ public class MasterMiddleWare implements MiddleWare {
     public void sendParameter(int slaveId, double para) {
         String message = Message.buildParameter(para);
         masterNode.send(slaveId, message);
+    } */
+    
+    public void sendPacket(int id, CommonPacket packet){
+        masterNode.sendObject(id, packet);
     }
 
     public int slaveNum(){
@@ -67,11 +78,19 @@ public class MasterMiddleWare implements MiddleWare {
             return 0;
     }
 
-    public void msgReceived(int nodeID, String msg) {
-        Message toAdd = new Message(msg);
+    public void msgReceived(int nodeId, CommonPacket packet) {
+    	packet.setSlaveId(nodeId);
+    /*	synchronized (packets) {
+            packets.add(packet);
+        }*/
+    	synchronized(packetHandler){
+      
+    	    packetHandler.handlePacket(packet.getObject());
+    	}
+       /* Message toAdd = new Message(msg);
 
         switch (toAdd.opCode) {
-            /*
+            
             case Macro.getTransferMatrixDOuble:
                 double[] oneDimArray = new double[toAdd.matrixIntegerM * toAdd.matrixIntegerN - 1];
 
@@ -90,7 +109,7 @@ public class MasterMiddleWare implements MiddleWare {
                 }
 
                 break;
-            */
+           
             case Macro.transferParameter:
                 MsgItem para = new MsgItem(nodeID, toAdd.opCode, Double.parseDouble(toAdd.message));
                 synchronized (msgs) {
@@ -99,7 +118,7 @@ public class MasterMiddleWare implements MiddleWare {
 
                 break;
         }
-        /*
+        
 
         */
     }

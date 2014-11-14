@@ -26,6 +26,10 @@ public class Slave_getSplitedMatrix {
 		this.src = matrix;
 	}
 	
+    /**
+     * setTag after receiving from master
+     *
+     */
 	public void setTag (Tag tag) {
 		this.tag = tag;
 	}
@@ -37,17 +41,30 @@ public class Slave_getSplitedMatrix {
 	public Mat construct(){
 		int begin = this.tag.getBegin();
 		int end = this.tag.getEnd();
-		System.out.println(begin +"   " + end);
-		int cols = end - begin + 1;
-		int rows = this.src.rows;
-		Mat temp = new Mat(rows, cols);
-		temp.create();
-		for(int j = 0; j < cols * rows; j++){
-			int r = j / cols;
-			int c = j % cols;
-			temp.data[j] = this.src.data[begin + r * rows + c];
-		}
-		return temp;
+        
+        Mat temp = this.src.colRange(begin, end);
+        return temp;
+       /* Original construct method
+        *
+		* int cols = end - begin + 1;
+		* int rows = this.src.rows;
+		* Mat temp = new Mat(rows, cols);
+		* temp.create();
+		* for(int j = 0; j < cols * rows; j++){
+		* 	int r = j / cols;
+		*	int c = j % cols;
+		*	temp.data[j] = this.src.data[begin + r * rows + c];
+		* }
+		* return temp;
+		*/
+
+		/*
+		 * test
+		 * 		System.out.println("after splitted");
+		 * System.out.println("splited rows:  " + temp.rows + "splited cols:  " + temp.cols);
+		 * temp.display();
+		 * 
+		 */
 	}
-	
+
 }

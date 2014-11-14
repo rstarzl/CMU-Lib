@@ -6,8 +6,8 @@ import java.io.*;
 public class SlaveNode {
     String mName = "";
     Socket socket = null;
-    PrintWriter os = null;
-    BufferedReader in = null;
+    private ObjectOutputStream oos;
+    ObjectInputStream ois = null;
     MiddleWare midd =null;
 
     private String masterAddress;
@@ -30,24 +30,27 @@ public class SlaveNode {
   //          System.out.println(InetAddress.getLocalHost().getHostAddress());
             socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
             //socket = new Socket(this.masterAddress, this.masterPort);
-            os = new PrintWriter(socket.getOutputStream());
-            os.println("Hello master! - from " + mName);
-            os.flush();
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            new Thread(new SlaveService(in)).start();
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+            new Thread(new SlaveService(ois)).start();
         }catch (Exception ex) {
             System.out.println("Could not find!");
         }
     }
 
-    public void send(String message){
-        os.println(message);
-        os.flush();
+    public void send(CommonPacket packet){
+        try {
+			oos.writeObject(packet);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public void disconnect() {
         try {
-            os.close();
+            oos.close();
+            ois.close();
             socket.close();
         }
         catch (Exception ex) {
@@ -57,26 +60,29 @@ public class SlaveNode {
 
 
     private class SlaveService implements Runnable{
-        private BufferedReader in;
+        private ObjectInputStream ois;
 
-        public SlaveService(BufferedReader in) {
-            this.in = in;
-            System.out.println(this.in==null);
+        public SlaveService(ObjectInputStream in) {
+            this.ois = in;
+            System.out.println(this.ois==null);
         }
 
         public void run(){
-            String fromMaster;
+            CommonPacket packet;
             try{
                 System.out.println("slave service started read from master!!!");
-                System.out.println(in.readLine());
-                while((fromMaster=in.readLine())!=null){
+                //System.out.println(in.readLine());
+                while(true){
                     // TODO: confirm if received string is complete
-                    Message receivedMessage = new Message(fromMaster);
+                    //Message receivedMessage = new Message(fromMaster);
                     //System.out.println("From master: " + fromMaster);
-                    midd.msgReceived(-1, fromMaster);
+                	packet = (CommonPacket) ois.readObject();
+                	//TestClass data = (TestClass) packet.getObject();
+                	//Double data = (Double) packet.getObject();
+                    midd.msgReceived(-1, packet);
 
                     // Decide which operation received
-                    switch (receivedMessage.opCode){
+                    /*switch (receivedMessage.opCode){
                         case Macro.transferParameter:
                             // TODO(fyraimar) replace fake implement
                             //double received = Double.parseDouble(receivedMessage.message);
@@ -92,8 +98,8 @@ public class SlaveNode {
                             break;
                         default:
                             break;
-                    }
-                    System.out.println(fromMaster);
+                    }*/
+                   // System.out.println(fromMaster);
                 }
             }catch(IOException e){
                 System.out.println(e.toString());
