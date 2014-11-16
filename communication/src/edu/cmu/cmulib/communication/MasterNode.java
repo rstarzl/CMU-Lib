@@ -11,7 +11,7 @@ import java.io.*;
 public class MasterNode {
     HashMap<Integer, SlaveData> slaveMap;
     int slaveId=1;
-    private int port = 8000;
+    private int port = -1;
     private ExecutorService executorService;
     private ServerSocket serverSocket;
     private final int POOL_SIZE = 5;
@@ -20,11 +20,12 @@ public class MasterNode {
     //private SDMiddleWare middleWare;
     private Callback middleWare;
     // contructor 
-    public MasterNode(MiddleWare nmidd) throws IOException {
+    public MasterNode(int port, MiddleWare nmidd) throws IOException {
         System.out.println("I'm a MasterNode!");
         slaveMap = new HashMap<Integer, SlaveData>();
         serverSocket = new ServerSocket(port);
         executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * POOL_SIZE);
+        this.port = port;
         midd = nmidd;
     }
 

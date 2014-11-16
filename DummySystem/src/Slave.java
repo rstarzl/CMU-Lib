@@ -56,11 +56,11 @@ public class Slave {
 
         String address = InetAddress.getLocalHost().getHostAddress();
         int port = 8000;
-        SlaveMiddleWare sdSlave = new SlaveMiddleWare();
+        SlaveMiddleWare sdSlave = new SlaveMiddleWare(address, port);
         sdSlave.register(Double[].class, mList);
         sdSlave.register(Tag.class, tagList);
         System.out.println(address + " " + port);
-        sdSlave.startSlave(address, port);
+        sdSlave.startSlave();
 
         
 		Slave_getSplitedMatrix split = new Slave_getSplitedMatrix(score);
