@@ -1,0 +1,6 @@
+package edu.cmu.cmulib.controller;
+
+public abstract class DataPreparationHelper {
+	Request request;
+	
+}
