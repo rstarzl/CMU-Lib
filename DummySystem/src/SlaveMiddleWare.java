@@ -13,6 +13,9 @@ public class SlaveMiddleWare implements MiddleWare {
     
     public PacketHandler packetHandler;
 
+    public String address;
+    public int port;
+
     public class MsgItem {
         public int opId;
         //public Mat data;
@@ -33,12 +36,14 @@ public class SlaveMiddleWare implements MiddleWare {
         }
     }
 
-    public SlaveMiddleWare() {
+    public SlaveMiddleWare(String nAddress, int nPort) {
     	packets = new LinkedList<CommonPacket>();
     	packetHandler = new PacketHandler();
+        address = nAddress;
+        port = nPort;
     }
 
-    public void startSlave(String address, int port) throws IOException{
+    public void startSlave() throws IOException{
         slaveNode = new SlaveNode(address, port, this);
         slaveNode.connect();
     }

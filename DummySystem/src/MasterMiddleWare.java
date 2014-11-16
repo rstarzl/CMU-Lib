@@ -32,18 +32,21 @@ public class MasterMiddleWare implements MiddleWare {
     public Queue<CommonPacket> packets;
     
     public PacketHandler packetHandler;
+
+    public int port;
     
     public void register(Class<?> clazz, Queue list){
 		packetHandler.register(clazz, list);
 	}
     
-    public MasterMiddleWare() {
+    public MasterMiddleWare(int nPort) {
+        port = nPort;
     	packets = new LinkedList<CommonPacket>();
     	packetHandler = new PacketHandler();
     }
 
     public void startMaster() throws IOException{
-        masterNode = new MasterNode(this);
+        masterNode = new MasterNode(port, this);
         masterNode.startListen();
     }
 /*

@@ -13,23 +13,15 @@ public class SlaveNode {
     private String masterAddress;
     private int masterPort;
 
-    public SlaveNode(String nn) {
-        mName = nn;
-        System.out.println("I'm a SlaveNode - " + mName);
-    }
-
     public SlaveNode(String masterAddress, int masterPort, MiddleWare myMidd){
         this.masterAddress = masterAddress;
         this.masterPort = masterPort;
         this.midd = myMidd;
     }
 
-
     public void connect() {
         try {
-  //          System.out.println(InetAddress.getLocalHost().getHostAddress());
-            socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8000);
-            //socket = new Socket(this.masterAddress, this.masterPort);
+            socket = new Socket(this.masterAddress, this.masterPort);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
             new Thread(new SlaveService(ois)).start();

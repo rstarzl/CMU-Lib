@@ -24,8 +24,10 @@ public class Master {
         Mat score = new Mat(rows, cols ,test);
         Tag tag;
         Mat Like, slaveL;
+
+        int port = 8000;
             
-        MasterMiddleWare commu = new MasterMiddleWare();
+        MasterMiddleWare commu = new MasterMiddleWare(port);
         commu.register(Double[].class,mList);
         commu.startMaster();
             
