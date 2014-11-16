@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import edu.cmu.cmulib.communication.CommonPacket;
 
@@ -29,9 +30,23 @@ public class Slave {
 	public static void main (String[] args) throws IOException {
         
         // initialize original matrix
-		double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
+		/*double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
 		int rows = 8;
-		int cols = 4;
+		int cols = 4;*/
+
+        /******************1000 by 1000 test*****************/
+        Scanner scan = new Scanner(new File("svd.data"));
+        String line;
+        double[] test = new double[1000*1000];
+        for (int i = 0; i < 1000*1000; i++)
+            line = scan.nextLine();
+            test[i] = Double.parseDouble(line.trim());
+        }
+        scan.close();
+        int rows = 1000;
+        int cols = 1000;
+        /**********************Over*************************/
+
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
         LinkedList<Tag> tagList = new LinkedList<Tag>();
         
