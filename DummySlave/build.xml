@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cmulib-commu">
+    <target name="clean-communication">
+        <delete file="./lib/communication.jar"/>
+        <delete dir="../communication/build"/>
+    </target>
+
+    <target name="compile-communication" depends="clean-communication">
+        <mkdir dir="../communication/build/classes"/>
+        <javac target="1.6" srcdir="../communication/src" destdir="../communication/build/classes"/>
+    </target>
+
+    <target name="package-communication" depends="compile-communication">
+        <jar destfile="./lib/communication.jar"
+             basedir="../communication/build/classes">
+        </jar>
+    </target>
+
+    <target name="clean-coolmatrix">
+        <delete file="./lib/coolmatrix.jar"/>
+        <delete dir="../CoolMatrixUtility/build"/>
+    </target>
+
+    <target name="compile-coolmatrix" depends="clean-coolmatrix">
+        <mkdir dir="../CoolMatrixUtility/build/classes"/>
+        <javac target="1.6" srcdir="../CoolMatrixUtility/src" destdir="../CoolMatrixUtility/build/classes">
+            <classpath>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="package-coolmatrix" depends="compile-coolmatrix">
+        <jar destfile="./lib/coolmatrix.jar"
+             basedir="../CoolMatrixUtility/build/classes">
+        </jar>
+    </target>
+
+    <target name="compile" depends="package-communication, package-coolmatrix">
+        <mkdir dir="./build/classes"/>
+        <javac target="1.6" srcdir="src" destdir="./build/classes">
+            <classpath>
+                <pathelement path="./lib/communication.jar"/>
+                <pathelement path="./lib/coolmatrix.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="run-master">
+        <java classname="Master">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+                <pathelement path="./lib/communication.jar"/>
+                <pathelement path="./lib/coolmatrix.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="run-slave">
+        <java classname="Slave">
+            <arg line="${args}"/>
+            <classpath>
+                <pathelement path="build/classes"/>
+                <pathelement path="./lib/communication.jar"/>
+                <pathelement path="./lib/coolmatrix.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT.jar"/>
+                <pathelement path="./lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+
+</project>
+
