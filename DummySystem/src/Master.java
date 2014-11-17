@@ -25,7 +25,7 @@ public class Master {
         Tag tag;
         Mat Like, slaveL;
 
-        int port = 8000;
+        int port = Integer.parseInt(args[0]);
             
         MasterMiddleWare commu = new MasterMiddleWare(port);
         commu.register(Double[].class,mList);

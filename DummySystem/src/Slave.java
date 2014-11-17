@@ -32,21 +32,21 @@ public class Slave {
 		double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
 		int rows = 8;
 		int cols = 4;
+        String address = args[0];
+        int port = Integer.parseInt(args[1]);
+
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
         LinkedList<Tag> tagList = new LinkedList<Tag>();
         
 		Mat score = new Mat(rows, cols ,test);
         Mat S, L;
-        
 
-        String address = InetAddress.getLocalHost().getHostAddress();
-        int port = 8000;
+        //String address = InetAddress.getLocalHost().getHostAddress();
         SlaveMiddleWare sdSlave = new SlaveMiddleWare(address, port);
         sdSlave.register(Double[].class, mList);
         sdSlave.register(Tag.class, tagList);
         System.out.println(address + " " + port);
         sdSlave.startSlave();
-
         
 		Slave_getSplitedMatrix split = new Slave_getSplitedMatrix(score);
 		Slave_SVD svd = new Slave_SVD();
