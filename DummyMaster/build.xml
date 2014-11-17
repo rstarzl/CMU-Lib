@@ -50,6 +50,17 @@
         </javac>
     </target>
 
+    <target name="package-masternode" depends="compile">
+        <delete file="../MasterNode.jar"/>
+        <jar destfile="../MasterNode.jar"
+            basedir="./build/classes">
+            <zipgroupfileset dir="./lib/" includes="*.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="Master"/>
+            </manifest>
+        </jar>
+    </target>
+
     <target name="run-master">
         <java classname="Master">
             <arg line="${args}"/>

@@ -50,6 +50,17 @@
         </javac>
     </target>
 
+    <target name="package-slavenode" depends="compile">
+        <delete file="../SlaveNode.jar"/>
+        <jar destfile="../SlaveNode.jar"
+            basedir="./build/classes">
+            <zipgroupfileset dir="./lib/" includes="*.jar"/>
+            <manifest>
+                <attribute name="Main-Class" value="Slave"/>
+            </manifest>
+        </jar>
+    </target>
+
     <target name="run-master">
         <java classname="Master">
             <arg line="${args}"/>

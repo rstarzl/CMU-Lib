@@ -1,0 +1,10 @@
+    clean-communication
+    compile-communication
+    package-communication
+    clean-coolmatrix
+    compile-coolmatrix
+    package-coolmatrix
+    compile
+    package-masternode
+    run-master
+    run-slave
