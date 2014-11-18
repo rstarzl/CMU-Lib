@@ -6,6 +6,7 @@ import cmu.decomp.svd.Master_SVD;
 import cmu.decomp.svd.Master_Spliter;
 import cmu.help.Tag;
 import java.io.IOException;
+import java.io.*;
 
 import edu.cmu.cmulib.communication.CommonPacket;
 
@@ -14,13 +15,23 @@ public class Master {
 
 		public static void main (String[] args) throws IOException {
         // 4 slaves assumed
-		int slaveNum = 4;
+        double[] test = new double[1000*1000];
+        int q = 0;
+		int slaveNum = 1;
 		LinkedList<Double[]> mList = new LinkedList<Double[]>();
 
+        BufferedReader br = new BufferedReader(new FileReader("svd.data.txt"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            test[q] = Double.parseDouble(line);
+            q++;
+        }
+        br.close();
+        
+
         // initialize original matrix
-        double[] test = {6,8,9,6,2,9,7,7,8,5,8,7,4,8,6,8,5,4,7,3,5,9,8,6,9,6,7,8,6,6,6,8};
-        int rows = 8;
-        int cols = 4;
+        int rows = 1000;
+        int cols = 1000;
         Mat score = new Mat(rows, cols ,test);
         Tag tag;
         Mat Like, slaveL;
@@ -153,7 +164,6 @@ public class Master {
             double sum = a[0] + a[1] + a[2] + a[3];*/
             //System.out.println("sum :" + sum);
         }
-		
 		public static void printArray(double[] arr){
 			for(double i: arr)
 				System.out.print(i+" ");
