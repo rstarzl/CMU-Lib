@@ -3,9 +3,19 @@ package edu.cmu.cmulib.API.data;
 /**
  * a DataAPI used to read file and pass it to the Master Node Sample Usage:
  * 
+ * Exmaple:
+ *       String fileName = "aFileName";
+ *       DataAPI processor = new DataAPI();
+ *       
+ *       IgnoreRearTokensStrategy moreStra = new IgnoreRearTokensStrategy();
+ *       PaddingRearWithValueStrategy lessStra = new PaddingRearWithValueStrategy("9.9");
+ *       processor.setNotEnoughDelimiterStrategy(lessStra);
+ *       processor.setTooManyDelimiterErrorStrategy(moreStra);
+ *       processor.processingData(1000, 100, fileName, ",", "dataType");
+ * 
  * @author Cambi
  */
-class DataAPI {
+public class DataAPI {
 
     private final DataFileProcesser fileProcesser = new DataFileProcesser();
 
@@ -87,13 +97,10 @@ class DataAPI {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        // Sends data to Master's getData method and returns true if it was
-        // received successfully. Else, false.
-        if (Master
-                .getData(numSlaves, tokens, numOfRows, numOfColumns, dataType))
-            return true;
-        else
-            return false;
+        
+        // Sends data to Master's getData method
+        return (Master.getData(numSlaves, tokens, numOfRows, numOfColumns,
+                dataType));
 
     }
 }

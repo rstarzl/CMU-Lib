@@ -8,7 +8,7 @@ import java.util.Arrays;
  * @author Cambi, Soumya
  *
  */
-public class DataFileProcesser {
+class DataFileProcesser {
 
     private DelimiterErrorStrategy notEnoughDelimiterStrategy;
 
@@ -99,7 +99,7 @@ public class DataFileProcesser {
         BufferedReader br = new BufferedReader(new FileReader(srcDataFile));
         String line = br.readLine();
         int numRowsSeen = 0;
-        while (line != null || numRowsSeen == numOfRows) {
+        while (line != null && numRowsSeen < numOfRows) {
             String[] tokens = line.split(delimiter);
 
             // Check and correct data types

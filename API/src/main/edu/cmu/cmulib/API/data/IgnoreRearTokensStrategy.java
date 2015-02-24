@@ -20,13 +20,16 @@ public class IgnoreRearTokensStrategy implements DelimiterErrorStrategy {
     /** 
      * {@inheritDoc}
      * 
-     * requires tokens.length >= numTokens
+     * requires tokens.length >= numTokens and numTokens > 0
      * Delete tokens in the rear when there are too many tokens
      */
     @Override
     public String[] handleWrongNumElementInaRow(String[] tokens, int numTokens) {
         if (tokens.length < numTokens) {
             throw new IllegalStateException("Less tokens than expected");
+        }
+        if (numTokens < 0) {
+            throw new IllegalArgumentException("negative numTokens");
         }
         return Arrays.copyOf(tokens, numTokens);
     }
