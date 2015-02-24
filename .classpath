@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="API/src"/>
+	<classpathentry kind="src" path="APIs/Data"/>
+	<classpathentry kind="src" path="communication/src"/>
+	<classpathentry kind="src" path="CoolMatrixUtility/src"/>
+	<classpathentry kind="src" path="CoolMatrixUtility/test"/>
+	<classpathentry kind="src" path="DummyMaster/src"/>
+	<classpathentry kind="src" path="DummySlave/src"/>
+	<classpathentry kind="lib" path="communication/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="communication/mtj-1.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="CoolMatrixUtility/lib/communication.jar"/>
+	<classpathentry kind="lib" path="CoolMatrixUtility/lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="CoolMatrixUtility/lib/mtj-1.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="DummyMaster/lib/communication.jar"/>
+	<classpathentry kind="lib" path="DummyMaster/lib/coolmatrix.jar"/>
+	<classpathentry kind="lib" path="DummyMaster/lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="DummyMaster/lib/mtj-1.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="DummySlave/lib/communication.jar"/>
+	<classpathentry kind="lib" path="DummySlave/lib/coolmatrix.jar"/>
+	<classpathentry kind="lib" path="DummySlave/lib/mtj-1.0.2-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="DummySlave/lib/mtj-1.0.2-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="MasterNode.jar"/>
+	<classpathentry kind="lib" path="SlaveNode.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
