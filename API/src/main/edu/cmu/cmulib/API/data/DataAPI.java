@@ -3,8 +3,7 @@ package edu.cmu.cmulib.API.data;
 /**
  * a DataAPI used to read file and pass it to the Master Node Sample Usage:
  * 
- * Exmaple:
- *       String fileName = "aFileName";
+ * Example:
  *       DataAPI processor = new DataAPI();
  *       
  *       IgnoreRearTokensStrategy moreStra = new IgnoreRearTokensStrategy();
