@@ -4,4 +4,5 @@
   <fileset name="all" enabled="true" check-config-name="OO214" local="false">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
+  <filter name="UnOpenedFiles" enabled="true"/>
 </fileset-config>

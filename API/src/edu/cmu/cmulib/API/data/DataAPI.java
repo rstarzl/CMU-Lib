@@ -1,4 +1,4 @@
-package edu.cmu.cmulib.data.API;
+package edu.cmu.cmulib.API.data;
 
 /**
  * a DataAPI used to read file and pass it to the Master Node Sample Usage:

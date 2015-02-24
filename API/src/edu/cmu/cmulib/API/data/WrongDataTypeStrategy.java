@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cmu.cmulib.data.API;
+package edu.cmu.cmulib.API.data;
 
 /**
  * a strategy to handle error in data type
