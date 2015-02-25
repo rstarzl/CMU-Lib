@@ -1,5 +1,9 @@
 package edu.cmu.cmulib.API.ml;
 
+/**
+ * @author      Yi Song, Mengda Yang
+ *
+ */
 public class Data {
 
 	String delimiter;
