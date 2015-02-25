@@ -5,6 +5,8 @@ package edu.cmu.cmulib.API.data;
 
 /**
  * a strategy to handle error in data type
+ * 
+ * @author Cambi
  */
 public interface WrongDataTypeStrategy {
 

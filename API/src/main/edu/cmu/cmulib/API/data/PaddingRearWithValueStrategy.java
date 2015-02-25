@@ -31,7 +31,7 @@ public class PaddingRearWithValueStrategy implements DelimiterErrorStrategy {
      * tokens
      */
     @Override
-    public String[] handleWrongNumElementInaRow(String[] tokens, int numTokens) {
+    public String[] handleWrongNumElementInaRow(String[] tokens, int numTokens, String rawData) {
         if (tokens.length > numTokens) {
             throw new IllegalStateException("More tokens than expected");
         }

@@ -19,13 +19,13 @@ public class PaddingRearWithValueStrategyTest {
         tokens[0] = "0.0";
         tokens[1] = "1.0";
         PaddingRearWithValueStrategy strategy = new PaddingRearWithValueStrategy("9.9");
-        String[] pTokens = strategy.handleWrongNumElementInaRow(tokens, 3);
+        String[] pTokens = strategy.handleWrongNumElementInaRow(tokens, 3, "");
         assertEquals(pTokens.length, 3);
         assertEquals(pTokens[0], "0.0");
         assertEquals(pTokens[1], "1.0");
         assertEquals(pTokens[2], "9.9");
         
-        pTokens = strategy.handleWrongNumElementInaRow(tokens, 4);
+        pTokens = strategy.handleWrongNumElementInaRow(tokens, 4, "");
         assertEquals(pTokens.length, 4);
         assertEquals(pTokens[0], "0.0");
         assertEquals(pTokens[1], "1.0");
