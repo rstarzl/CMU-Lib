@@ -46,7 +46,7 @@ public class DataAPI {
      * @param strategy
      *            a {@link DelimiterErrorStrategy}
      */
-    public void setNotEnoughRowsStrategy(NumRowsErrorStrategy strategy) {
+    public void setNotEnoughRowsStrategy(NotEnoughRowsStrategy strategy) {
         this.fileProcesser.setNotEnoughRowStrategy(strategy);
     }
 
@@ -56,7 +56,7 @@ public class DataAPI {
      * @param strategy
      *            a {@link DelimiterErrorStrategy}
      */
-    public void setTooManyRowsStrategy(NumRowsErrorStrategy strategy) {
+    public void setTooManyRowsStrategy(TooManyRowsStrategy strategy) {
         this.fileProcesser.setTooManyRowsErrorStrategy(strategy);
     }
 
@@ -93,12 +93,11 @@ public class DataAPI {
             String[][] tokens = this.fileProcesser.processingData(numOfRows,
                     numOfColumns, srcDataFile, delimiter, dataType);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
-        // Sends data to Master's getData method
-        return (Master.getData(numSlaves, tokens, numOfRows, numOfColumns,
+        // Sends data to Master's acceptData method
+        return (Master.acceptData(numSlaves, tokens, numOfRows, numOfColumns,
                 dataType));
 
     }

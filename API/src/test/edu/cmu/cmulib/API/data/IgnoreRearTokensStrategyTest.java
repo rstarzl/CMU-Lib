@@ -20,13 +20,13 @@ public class IgnoreRearTokensStrategyTest {
         tokens[1] = "1.0";
         tokens[2] = "2.0";
         IgnoreRearTokensStrategy strategy = new IgnoreRearTokensStrategy();
-        String[] pTokens = strategy.handleWrongNumElementInaRow(tokens, 0);
+        String[] pTokens = strategy.handleWrongNumElementInaRow(tokens, 0, "");
         assertEquals(pTokens.length, 0);
-        pTokens = strategy.handleWrongNumElementInaRow(tokens, 1);
+        pTokens = strategy.handleWrongNumElementInaRow(tokens, 1, "");
         assertEquals(pTokens.length, 1);
         assertEquals(pTokens[0], "0.0");
         
-        pTokens = strategy.handleWrongNumElementInaRow(tokens, 2);
+        pTokens = strategy.handleWrongNumElementInaRow(tokens, 2, "");
         assertEquals(pTokens.length, 2);
         assertEquals(pTokens[0], "0.0");
         assertEquals(pTokens[1], "1.0");

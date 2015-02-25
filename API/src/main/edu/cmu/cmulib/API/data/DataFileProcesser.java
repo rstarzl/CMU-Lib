@@ -12,12 +12,12 @@ class DataFileProcesser {
 
     private DelimiterErrorStrategy notEnoughDelimiterStrategy;
 
-    private DelimiterErrorStrategy tooManyDelimiterErrorStrategy;
+    private DelimiterErrorStrategy tooManyDelimiterStrategy;
 
-    private NumRowsErrorStrategy notEnoughRowStrategy;
+    private NotEnoughRowsStrategy notEnoughRowStrategy;
 
     // not handled yet
-    private NumRowsErrorStrategy tooManyRowsErrorStrategy;
+    private TooManyRowsStrategy tooManyRowsStrategy;
 
     private WrongDataTypeStrategy wrongDataTypeStrategy;
 
@@ -34,14 +34,14 @@ class DataFileProcesser {
      *            the tooManyDelimiterErrorStrategy to set
      */
     public void setTooManyDelimiterErrorStrategy(DelimiterErrorStrategy strategy) {
-        this.tooManyDelimiterErrorStrategy = strategy;
+        this.tooManyDelimiterStrategy = strategy;
     }
 
     /**
      * @param strategy
      *            the notEnoughRowStrategy to set
      */
-    public void setNotEnoughRowStrategy(NumRowsErrorStrategy strategy) {
+    public void setNotEnoughRowStrategy(NotEnoughRowsStrategy strategy) {
         this.notEnoughRowStrategy = strategy;
     }
 
@@ -49,8 +49,8 @@ class DataFileProcesser {
      * @param strategy
      *            the tooManyRowsErrorStrategy to set
      */
-    public void setTooManyRowsErrorStrategy(NumRowsErrorStrategy strategy) {
-        this.tooManyRowsErrorStrategy = strategy;
+    public void setTooManyRowsErrorStrategy(TooManyRowsStrategy strategy) {
+        this.tooManyRowsStrategy = strategy;
     }
 
     /**
@@ -104,20 +104,22 @@ class DataFileProcesser {
 
             // Check and correct data types
             boolean[] flags = this.typeCheck(tokens, dataType);
-            if (!this.chcekSuccessful(flags)) {
+            if (!this.chcekSuccessful(flags) && wrongDataTypeStrategy != null) {
                 tokens = this.wrongDataTypeStrategy.handleWrongDataTypeInaRow(
                         tokens, flags);
             }
 
             // Check and correct the number of tokens
-            if (tokens.length > numOfColumns) {
-                tokens = this.tooManyDelimiterErrorStrategy
-                        .handleWrongNumElementInaRow(tokens, numOfColumns);
+            if (tokens.length > numOfColumns
+                    && tooManyDelimiterStrategy != null) {
+                tokens = this.tooManyDelimiterStrategy
+                        .handleWrongNumElementInaRow(tokens, numOfColumns, line);
             }
 
-            if (tokens.length < numOfColumns) {
+            if (tokens.length < numOfColumns
+                    && notEnoughDelimiterStrategy != null) {
                 tokens = this.notEnoughDelimiterStrategy
-                        .handleWrongNumElementInaRow(tokens, numOfColumns);
+                        .handleWrongNumElementInaRow(tokens, numOfColumns, line);
             }
 
             for (int i = 0; i < tokens.length; i++) {
@@ -128,14 +130,19 @@ class DataFileProcesser {
 
             numRowsSeen++;
         }
-        br.close();
 
         // check and correct the number of rows
-        if (numRowsSeen < numOfRows) {
-            matrix = this.notEnoughRowStrategy.handleWrongNumRows(matrix,
+        if (numRowsSeen < numOfRows && notEnoughRowStrategy != null) {
+            matrix = this.notEnoughRowStrategy.handleLackOfRows(matrix,
                     numOfRows, numRowsSeen);
+            numOfRows = matrix.length;
+        } else if (line != null && tooManyRowsStrategy != null) {
+            matrix = this.tooManyRowsStrategy.handleTooManyRows(matrix,
+                    numOfRows, line, br);
+            numOfRows = matrix.length;
         }
 
+        br.close();
         return matrix;
     }
 
