@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="API/src"/>
 	<classpathentry kind="src" path="APIs/Data"/>
+	<classpathentry kind="src" path="API/src/test"/>
+	<classpathentry kind="src" path="API/src/main"/>
 	<classpathentry kind="src" path="communication/src"/>
 	<classpathentry kind="src" path="CoolMatrixUtility/src"/>
 	<classpathentry kind="src" path="CoolMatrixUtility/test"/>
