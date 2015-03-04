@@ -1,17 +1,20 @@
 package edu.cmu.cmulib.API.data;
-import edu.cmu.cmulib.*;
+
+import edu.cmu.cmulib.DummyMaster.Master;
+
+import cmu.core.Mat;
 
 /**
  * a DataAPI used to read file and pass it to the Master Node Sample Usage:
  * 
- * Example:
- *       DataAPI processor = new DataAPI();
- *       
- *       IgnoreRearTokensStrategy moreStra = new IgnoreRearTokensStrategy();
- *       PaddingRearWithValueStrategy lessStra = new PaddingRearWithValueStrategy("9.9");
- *       processor.setNotEnoughDelimiterStrategy(lessStra);
- *       processor.setTooManyDelimiterErrorStrategy(moreStra);
- *       processor.processingData(1000, 100, fileName, ",", "dataType");
+ * Example: DataAPI processor = new DataAPI();
+ * 
+ * IgnoreRearTokensStrategy moreStra = new IgnoreRearTokensStrategy();
+ * PaddingRearWithValueStrategy lessStra = new
+ * PaddingRearWithValueStrategy("9.9");
+ * processor.setNotEnoughDelimiterStrategy(lessStra);
+ * processor.setTooManyDelimiterErrorStrategy(moreStra);
+ * processor.processingData(1000, 100, fileName, ",", "dataType");
  * 
  * @author Cambi
  */
@@ -93,13 +96,39 @@ public class DataAPI {
         try {
             String[][] tokens = this.fileProcesser.processingData(numOfRows,
                     numOfColumns, srcDataFile, delimiter, dataType);
+            int numSlaves = 2;
+            return (Master.acceptData(numSlaves, tokens, numOfRows, numOfColumns, dataType));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        // Sends data to Master's acceptData method
-        return (Master.acceptData(numSlaves, tokens, numOfRows, numOfColumns,
-                dataType));
+        return false;
 
+        // Sends data to Master's acceptData method
+        
+        
+        
+    }
+
+    /**
+     * Appending data to Master Node
+     * 
+     * @param mat
+     *            the matrix to be appended
+     * @return true if the appending is successful
+     */
+    public boolean appendingData(String[][] mat) {
+        return Master.appendData(mat);
+
+    }
+
+    /**
+     * Deleting data from the end
+     * 
+     * @param numOfItems
+     *            number of items to be deleted
+     * @return true if deletion is successful
+     */
+    public boolean deletingData(int numOfItems) {
+        return Master.deleteData(numOfItems);
     }
 }
