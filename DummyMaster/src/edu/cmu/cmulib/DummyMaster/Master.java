@@ -1,3 +1,5 @@
+package edu.cmu.cmulib.DummyMaster;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import cmu.core.Mat;
@@ -5,14 +7,19 @@ import cmu.core.MatOp;
 import cmu.decomp.svd.Master_SVD;
 import cmu.decomp.svd.Master_Spliter;
 import cmu.help.Tag;
-import java.io.IOException;
 import java.io.*;
-
 import edu.cmu.cmulib.communication.CommonPacket;
 
 
 public class Master {
-
+	
+	
+		public static boolean acceptData(int numSlaves, String[][] tokens, int numOfRows, 
+				int numOfColumns, String dataType) {
+			return true;
+		}
+		
+		
 		public static void main (String[] args) throws IOException {
         // 4 slaves assumed
         double[] test = new double[1000*1000];

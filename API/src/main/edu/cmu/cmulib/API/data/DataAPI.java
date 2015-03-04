@@ -1,5 +1,5 @@
 package edu.cmu.cmulib.API.data;
-
+import edu.cmu.cmulib.DummyMaster.Master;
 /**
  * a DataAPI used to read file and pass it to the Master Node Sample Usage:
  * 
@@ -92,13 +92,15 @@ public class DataAPI {
         try {
             String[][] tokens = this.fileProcesser.processingData(numOfRows,
                     numOfColumns, srcDataFile, delimiter, dataType);
+            int numSlaves = 2;
+            return (Master.acceptData(numSlaves, tokens, numOfRows, numOfColumns, dataType));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+        return false;
         // Sends data to Master's acceptData method
-        return (Master.acceptData(numSlaves, tokens, numOfRows, numOfColumns,
-                dataType));
-
+        
+        
+        
     }
 }
