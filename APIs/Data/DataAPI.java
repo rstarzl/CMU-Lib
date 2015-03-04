@@ -1,11 +1,14 @@
-import edu.cmu.cmulib.DummyMaster.src.Master;
+/*Serializes and represents data in a stream (1 D array)
+ * and passes it to Master
+ * @author - Soumya Batra
+ */
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 class DataAPI{
     
     //Passes data to SVD (assuming SVD's Master contains getData method)
-    public static Boolean passingData(int numOfRows, int numOfColumns, Boolean sentByRow, String srcDataFile, String Delim, String dataType) throws Exception {
+    public Boolean passingData(int numOfRows, int numOfColumns, Boolean sentByRow, String srcDataFile, String Delim, String dataType) throws Exception {
         
         //Assuming number of slaves for now
         int numOfSlaves = 4;
@@ -47,7 +50,7 @@ class DataAPI{
         br.close();
         
         //Sends data to Master's getData method and returns true if it was received successfully. Else, false.
-        if (Master.getData(numSlaves,toks,numOfRows,numOfColumns,sentByRow,dataType) )
+        if (Master.getData(numOfSlaves,toks,numOfRows,numOfColumns,sentByRow,dataType) )
             return true;
         else
             return false;

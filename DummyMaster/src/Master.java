@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
+
 import cmu.core.Mat;
 import cmu.core.MatOp;
 import cmu.decomp.svd.Master_SVD;
 import cmu.decomp.svd.Master_Spliter;
 import cmu.help.Tag;
-import java.io.IOException;
+
 import java.io.*;
 
 import edu.cmu.cmulib.communication.CommonPacket;
@@ -196,6 +197,16 @@ public class Master {
 	        
 	        m.sendPacket(id, packet);
 			
+		}
+		
+		/* To be implemented 
+		   created by - Soumya Batra 
+		   Objective - get data in a stream(1D Array)*/
+		public static boolean getData(int numOfSlaves, String[] toks,
+				int numOfRows, int numOfColumns, Boolean sentByRow,
+				String dataType) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	
 }
