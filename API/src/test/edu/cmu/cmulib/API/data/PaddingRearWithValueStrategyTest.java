@@ -30,7 +30,7 @@ public class PaddingRearWithValueStrategyTest {
         assertEquals(pTokens[0], "0.0");
         assertEquals(pTokens[1], "1.0");
         assertEquals(pTokens[2], "9.9");
-        assertEquals(pTokens[3], "9.9");
+        assertEquals(pTokens[3], "9.9"); 
     }
 
 }

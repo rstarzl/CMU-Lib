@@ -26,7 +26,7 @@ public class DataFileProcesserTest {
         assertEquals(matrix[1][1], "2.1");
         assertEquals(matrix[2][0], "3.0");
         assertEquals(matrix[2][1], "3.1");
-    }
+    } 
     
     @Test
     public void testFileDelimiters() throws Exception {
