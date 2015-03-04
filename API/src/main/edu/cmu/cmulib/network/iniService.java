@@ -82,6 +82,15 @@ public class iniService {
 	    		case "MaxRAM":
 	    			Master.setMaxRam(Integer.parseInt(params.get(paramName)));
 	    			break;
+	    		case "TimeOut":
+	    			Master.setTimeOut(Integer.parseInt(params.get(paramName)));
+	    			break;
+	    		case "Redundency": //# of replicas
+	    			Master.setRedundency(Integer.parseInt(params.get(paramName)));
+	    			break;
+	    		case "ChunkSize":
+	    			Master.setChunkSize(Integer.parseInt(params.get(paramName)));
+	    			break;
 	    		default:
 	    			break;
 	    	}
