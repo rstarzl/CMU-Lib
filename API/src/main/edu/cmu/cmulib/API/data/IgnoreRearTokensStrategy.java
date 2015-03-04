@@ -33,5 +33,5 @@ public class IgnoreRearTokensStrategy implements DelimiterErrorStrategy {
         }
         return Arrays.copyOf(tokens, numTokens);
     }
-
+ 
 }

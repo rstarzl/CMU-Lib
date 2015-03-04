@@ -23,5 +23,5 @@ public interface NotEnoughRowsStrategy {
      */
     String[][] handleLackOfRows(String[][] tokens, int numRows,
             int numRowsSeen);
-
+ 
 }

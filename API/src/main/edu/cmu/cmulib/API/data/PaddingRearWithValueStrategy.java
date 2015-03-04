@@ -21,7 +21,7 @@ public class PaddingRearWithValueStrategy implements DelimiterErrorStrategy {
     public PaddingRearWithValueStrategy(String aPaddingString) {
         this.paddingString = aPaddingString;
     }
-
+ 
     /**
      * {@inheritDoc}
      * 

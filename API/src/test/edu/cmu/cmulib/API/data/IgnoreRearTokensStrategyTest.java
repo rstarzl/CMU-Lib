@@ -30,7 +30,7 @@ public class IgnoreRearTokensStrategyTest {
         assertEquals(pTokens.length, 2);
         assertEquals(pTokens[0], "0.0");
         assertEquals(pTokens[1], "1.0");
-
+ 
     }
 
 }
