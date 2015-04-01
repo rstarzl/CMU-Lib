@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,10 +26,13 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import edu.cmu.cmulib.SVD.calculate1svd;
+
 public class UI extends JPanel {
 
 	private static final long serialVersionUID = -3568891808859925700L;
 	private final static String[] ALGOS_NAME = { "SVD", "Decision Tree" };
+	private final static String[] FILE_TO_DUMP_NAME = {"Input", "Result"};
 	private static final String TITLE = "CMULib";
 	private static final int GRID_GAP = 10;
 	private static final int BORDER_LEN = 10;
@@ -54,7 +58,7 @@ public class UI extends JPanel {
 
 	/** file to download, download to, start downloading */
 	@SuppressWarnings("rawtypes")
-	private final JComboBox fileListBox = new JComboBox();
+	private final JComboBox fileListBox = new JComboBox(FILE_TO_DUMP_NAME);
 	private final JTextField dumpPathField = new JTextField(FIELD_LEN);
 	private final JButton browse3Btn = new JButton("Browse");
 	private final JButton startDumpBtn = new JButton("Start Downloading");
@@ -66,15 +70,20 @@ public class UI extends JPanel {
 	
 	private File inputFile;
 	private File outputFolder;
-	private String fileToDownload;
 	private File downloadToFolder;
+	private String resultFilePath;
+	private String algoName = "SVD";
+	private String fileToDownloadOption;
+	
+	private calculate1svd core;
 	
 
 	// private final Model model
 
-	public UI() {
+	public UI(calculate1svd inputcore) {
 		// model = inputModel;
-
+		core = inputcore;
+		
 		JPanel labelsPanel = new JPanel();
 		labelsPanel.setLayout(new GridLayout(INPUT_ITEM_NUM, 1, GRID_GAP,
 				GRID_GAP));
@@ -123,7 +132,7 @@ public class UI extends JPanel {
 		JPanel progressPanel = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(progressArea);
 		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		progressPanel.add(scrollPane);
@@ -242,8 +251,16 @@ public class UI extends JPanel {
 		
 		runBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
-            	// TODO call the method
+            public void actionPerformed(ActionEvent event){
+            	algoName = (String)algoListBox.getSelectedItem();
+            	if (algoName.equals("SVD")){
+            		try{
+                		core.svdMaster(inputFile.getCanonicalPath(), outputFolder.getCanonicalPath());
+            		}
+            		catch(Exception e){
+						e.printStackTrace();
+            		}
+            	}
             }
         });
 		
@@ -251,6 +268,13 @@ public class UI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
             	// TODO call the method
+            	fileToDownloadOption = (String)fileListBox.getSelectedItem();
+            	
+            	if (fileToDownloadOption.equals("Input")){
+            		
+            	}else if (fileToDownloadOption.equals("Result")){
+            		
+            	}
             }
         });	
 		
@@ -267,7 +291,9 @@ public class UI extends JPanel {
 
 	/** create GUI and show it */
 	public static void createAndShowGUI() {
-		UI gui = new UI();
+		calculate1svd core = new calculate1svd();
+		UI gui = new UI(core);
+		core.setUI(gui);
 		gui.show();
 	}
 
