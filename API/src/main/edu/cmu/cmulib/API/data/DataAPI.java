@@ -1,4 +1,5 @@
 package edu.cmu.cmulib.API.data;
+
 import edu.cmu.cmulib.DummyMaster.Master;
 
 import cmu.core.Mat;
