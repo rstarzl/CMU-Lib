@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,6 +30,7 @@ public class UI extends JPanel {
 
 	private static final long serialVersionUID = -3568891808859925700L;
 	private final static String[] ALGOS_NAME = { "SVD", "Decision Tree" };
+	private final static String[] FILE_TO_DUMP_NAME = {"Input", "Result"};
 	private static final String TITLE = "CMULib";
 	private static final int GRID_GAP = 10;
 	private static final int BORDER_LEN = 10;
@@ -54,7 +56,7 @@ public class UI extends JPanel {
 
 	/** file to download, download to, start downloading */
 	@SuppressWarnings("rawtypes")
-	private final JComboBox fileListBox = new JComboBox();
+	private final JComboBox fileListBox = new JComboBox(FILE_TO_DUMP_NAME);
 	private final JTextField dumpPathField = new JTextField(FIELD_LEN);
 	private final JButton browse3Btn = new JButton("Browse");
 	private final JButton startDumpBtn = new JButton("Start Downloading");
@@ -66,8 +68,10 @@ public class UI extends JPanel {
 	
 	private File inputFile;
 	private File outputFolder;
-	private String fileToDownload;
 	private File downloadToFolder;
+	private String resultFilePath;
+	private String algoName = "SVD";
+	private String fileToDownloadOption;
 	
 
 	// private final Model model
@@ -243,7 +247,10 @@ public class UI extends JPanel {
 		runBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	// TODO call the method
+            	algoName = (String)algoListBox.getSelectedItem();
+            	if (algoName.equals("SVD")){
+            		// TODO call run method also set resultFile
+            	}
             }
         });
 		
@@ -251,6 +258,13 @@ public class UI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
             	// TODO call the method
+            	fileToDownloadOption = (String)fileListBox.getSelectedItem();
+            	
+            	if (fileToDownloadOption.equals("Input")){
+            		
+            	}else if (fileToDownloadOption.equals("Result")){
+            		
+            	}
             }
         });	
 		
