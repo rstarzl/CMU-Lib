@@ -3,11 +3,16 @@ package edu.cmu.cmulib.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,8 +25,9 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-public class UI {
+public class UI extends JPanel {
 
+	private static final long serialVersionUID = -3568891808859925700L;
 	private final static String[] ALGOS_NAME = { "SVD", "Decision Tree" };
 	private static final String TITLE = "CMULib";
 	private static final int GRID_GAP = 10;
@@ -30,7 +36,10 @@ public class UI {
 	private static final int INPUT_ITEM_NUM = 3;
 	private static final int DUMP_ITEM_NUM = 2;
 	private static final int TEXT_AREA_SIZE = 50;
-
+	
+	private final JFrame frame = new JFrame(TITLE);
+	
+	/** Input path, output folder, algorithm*/
 	private final JTextField inputPathField = new JTextField(FIELD_LEN);
 	private final JTextField outputFolderField = new JTextField(FIELD_LEN);
 	private final JButton browse1Btn = new JButton("Browse");
@@ -38,17 +47,28 @@ public class UI {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private final JComboBox algoListBox = new JComboBox(ALGOS_NAME);
 
+	/** run button and progress area */
 	private final JButton runBtn = new JButton("Run");
 	private final JTextArea progressArea = new JTextArea(TEXT_AREA_SIZE,
 			TEXT_AREA_SIZE);
 
+	/** file to download, download to, start downloading */
 	@SuppressWarnings("rawtypes")
 	private final JComboBox fileListBox = new JComboBox();
 	private final JTextField dumpPathField = new JTextField(FIELD_LEN);
 	private final JButton browse3Btn = new JButton("Browse");
 	private final JButton startDumpBtn = new JButton("Start Downloading");
 
-	private final JFrame frame = new JFrame(TITLE);
+	/** various file path string */
+	private final JFileChooser inputPathFC = new JFileChooser();
+	private final JFileChooser outputFolderFC = new JFileChooser();
+	private final JFileChooser downloadFolderFC = new JFileChooser();
+	
+	private File inputFile;
+	private File outputFolder;
+	private String fileToDownload;
+	private File downloadToFolder;
+	
 
 	// private final Model model
 
@@ -161,7 +181,79 @@ public class UI {
 	}
 	
 	private void setAllActionListener(){
-		// TODO SET ACTION LISTERNER FOR BUTTONS AND TEXT FIELD
+		
+		browse1Btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	int returnVal = inputPathFC.showOpenDialog(UI.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                	inputFile = inputPathFC.getSelectedFile();
+                    try {
+						inputPathField.setText(inputFile.getCanonicalPath());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                    
+                } 
+            }
+        });
+		
+		browse2Btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	outputFolderFC.setCurrentDirectory(new java.io.File("."));
+            	outputFolderFC.setDialogTitle("Choose Folder to put output file");
+            	outputFolderFC.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            	outputFolderFC.setAcceptAllFileFilterUsed(false);
+            	int returnVal = outputFolderFC.showOpenDialog(UI.this);
+            	if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    outputFolder = outputFolderFC.getCurrentDirectory();
+                    try {
+						outputFolderField.setText(outputFolder.getCanonicalPath());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+            }
+        });
+		
+		browse3Btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	downloadFolderFC.setCurrentDirectory(new java.io.File("."));
+            	downloadFolderFC.setDialogTitle("Choose Folder to put output file");
+            	downloadFolderFC.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            	downloadFolderFC.setAcceptAllFileFilterUsed(false);
+            	int returnVal = downloadFolderFC.showOpenDialog(UI.this);
+            	if (returnVal == JFileChooser.APPROVE_OPTION) {
+            		downloadToFolder = downloadFolderFC.getCurrentDirectory();
+            		try {
+						dumpPathField.setText(downloadToFolder.getCanonicalPath());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }           
+            }
+        });
+		
+		
+		runBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	// TODO call the method
+            }
+        });
+		
+		startDumpBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	// TODO call the method
+            }
+        });	
+		
 	}
 
 	/** show the frame */
