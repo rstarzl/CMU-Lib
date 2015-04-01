@@ -124,6 +124,7 @@ public class Matrix {
 			sb.append(mat[i][0]);
 			sb.append(", ");
 		}
+		sb.append("\n");
 		return sb.toString();
 	}
 	

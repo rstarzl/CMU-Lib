@@ -132,7 +132,7 @@ public class UI extends JPanel {
 		JPanel progressPanel = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(progressArea);
 		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		progressPanel.add(scrollPane);

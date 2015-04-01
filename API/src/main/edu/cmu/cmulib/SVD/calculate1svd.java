@@ -28,6 +28,8 @@ public class calculate1svd {
 	public String svdMaster(String input, String output) throws Exception {
 		//input = "/Users/yingsheng/git/CMU-Lib/API/src/test/resources/data/testMat";
 		//output = "/Users/yingsheng/testMatout";
+		gui.updateprogressArea("***************** Start Job ***************************\n");
+		gui.updateprogressArea("Loading Data \n ... \n");
 		
 		output = output + "/svdResult";
 		DataFileProcesser processor = new DataFileProcesser();
@@ -45,6 +47,7 @@ public class calculate1svd {
         double thr = 1e-10;
         Matrix e_new = new Matrix(mat.row, mat.col, 100);
         Matrix e = new Matrix(mat.row, mat.col, 0); 
+        gui.updateprogressArea("Start Computing \n");
         while (Matrix.getDiff(e, e_new) != 0) {
         	System.out.println(Matrix.getDiff(e, e_new));
     
@@ -64,8 +67,9 @@ public class calculate1svd {
         	Matrix tmp = L.multiply(mat.transpose().multiply(L).transpose());
         	e_new = mat.minus(tmp);
         	System.out.println("end" + Matrix.getDiff(e, e_new));
-        }      
+        }    
         L.writeToFile(output);
+        gui.updateprogressArea("***************** Finish Job *******************\n");
         return output;
         
 	}
