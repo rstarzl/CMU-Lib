@@ -176,7 +176,7 @@ public class Matrix {
 	
 	public void writeToFile(String x) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(x)));
-		writer.write(x);
+		writer.write(this.firstColToStr());
 		writer.close();
 		return;
 	}
