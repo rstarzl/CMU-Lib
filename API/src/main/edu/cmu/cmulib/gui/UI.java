@@ -26,6 +26,8 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import edu.cmu.cmulib.SVD.calculate1svd;
+
 public class UI extends JPanel {
 
 	private static final long serialVersionUID = -3568891808859925700L;
@@ -73,12 +75,15 @@ public class UI extends JPanel {
 	private String algoName = "SVD";
 	private String fileToDownloadOption;
 	
+	private calculate1svd core;
+	
 
 	// private final Model model
 
-	public UI() {
+	public UI(calculate1svd inputcore) {
 		// model = inputModel;
-
+		core = inputcore;
+		
 		JPanel labelsPanel = new JPanel();
 		labelsPanel.setLayout(new GridLayout(INPUT_ITEM_NUM, 1, GRID_GAP,
 				GRID_GAP));
@@ -246,10 +251,15 @@ public class UI extends JPanel {
 		
 		runBtn.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent event) {
+            public void actionPerformed(ActionEvent event){
             	algoName = (String)algoListBox.getSelectedItem();
             	if (algoName.equals("SVD")){
-            		// TODO call run method also set resultFile
+            		try{
+                		core.svdMaster(inputFile.getCanonicalPath(), outputFolder.getCanonicalPath());
+            		}
+            		catch(Exception e){
+						e.printStackTrace();
+            		}
             	}
             }
         });
@@ -281,7 +291,9 @@ public class UI extends JPanel {
 
 	/** create GUI and show it */
 	public static void createAndShowGUI() {
-		UI gui = new UI();
+		calculate1svd core = new calculate1svd();
+		UI gui = new UI(core);
+		core.setUI(gui);
 		gui.show();
 	}
 

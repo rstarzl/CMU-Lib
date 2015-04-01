@@ -3,8 +3,15 @@ package edu.cmu.cmulib.SVD;
 import java.util.Random;
 
 import edu.cmu.cmulib.API.data.*;
+import edu.cmu.cmulib.gui.UI;
 
 public class calculate1svd {
+	
+	private UI gui;
+	
+	public void setUI(UI inputUI){
+		gui = inputUI;
+	}
 
 	/**
 	 * @param args
@@ -14,10 +21,11 @@ public class calculate1svd {
 		String input = "/Users/yingsheng/git/CMU-Lib/API/src/test/resources/data/testMat";
 		String output = "/Users/yingsheng/testMatout";
 		// TODO Auto-generated method stub
-		svdMaster(input, output);
+		
+//		svdMaster(input, output);
 	}
 	
-	public static String svdMaster(String input, String output) throws Exception {
+	public String svdMaster(String input, String output) throws Exception {
 		//input = "/Users/yingsheng/git/CMU-Lib/API/src/test/resources/data/testMat";
 		//output = "/Users/yingsheng/testMatout";
 		
@@ -50,6 +58,7 @@ public class calculate1svd {
         	L1.normalize();
         	L = L1;
         	System.out.println(L.firstColToStr());
+        	gui.updateprogressArea(L.firstColToStr());
         	e = e_new;
         	System.out.println("L row" + L.row + "  L col " + L.col + "mat row" + mat.row + " mat col " + mat.col);
         	Matrix tmp = L.multiply(mat.transpose().multiply(L).transpose());
