@@ -8,7 +8,7 @@ import java.util.Arrays;
  * @author Cambi, Soumya
  *
  */
-class DataFileProcesser {
+public class DataFileProcesser {
 
     private DelimiterErrorStrategy notEnoughDelimiterStrategy;
 

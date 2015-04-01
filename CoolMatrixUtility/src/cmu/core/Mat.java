@@ -122,52 +122,7 @@ public class Mat {
 		return t;
 	}
 	public Mat stransLmul(Mat S, Mat L) {
-		/*/*
-		 * Slow version, no optimization
-		 *
-		Mat t = new Mat(this.cols, this.rows);
-		t.create();
-		int idx = 0;
-		int colIdx, rowIdx;
-		for (int i = 0; i < data.length; i++) {
-			rowIdx = i / t.cols;
-			colIdx = i % t.cols;
-			idx = colIdx * t.rows + rowIdx;
-			t.data[idx] = this.data[i];
-		}*/
-	/*	Mat t = new Mat(S.cols, L.cols);
-	
-		
-	 for (int i =0 ; i < S.inner.getData().length; i++){
-			 
-			 if (i%S.cols == 0){
-				 System.out.println();
-			 }
-			 System.out.print(S.inner.getData()[i] + " ");
-		 }
-	 
-	 for (int i =0 ; i < L.inner.getData().length; i++){
-		 
-		 if (i%L.cols == 0){
-			 System.out.println();
-		 }
-		 System.out.print(L.inner.getData()[i] + " ");
-	 }
-		//double s1[] = {1,0};
-	//	double s2[] = {0,0};
-		S.inner.transAmult(L.inner, t.inner);
-	
-		t.data = t.inner.getData();
-	/*	(new Mat(1,2,s1)).inner.transAmult((new Mat(1,2,s1)).inner,t.inner);
-		t.data = t.inner.getData();*/
-	/*	 for (int i =0 ; i < t.inner.getData().length; i++){
-			 
-			 if (i%2 == 0){
-				 System.out.println();
-			 }
-			 System.out.print(t.inner.getData()[i] + " ");
-		 }
- System.out.println();*/
+
 		return null;
 	
 	}
