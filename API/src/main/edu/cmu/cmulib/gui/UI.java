@@ -255,6 +255,10 @@ public class UI extends JPanel {
         });	
 		
 	}
+	
+	public void updateprogressArea(String str){
+		progressArea.append(str);
+	}
 
 	/** show the frame */
 	public void show() {
