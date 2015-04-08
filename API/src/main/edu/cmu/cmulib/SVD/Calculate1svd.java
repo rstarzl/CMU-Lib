@@ -1,15 +1,40 @@
 package edu.cmu.cmulib.SVD;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import edu.cmu.cmulib.API.data.*;
 import edu.cmu.cmulib.gui.UI;
 
-public class calculate1svd {
+public class Calculate1svd {
 	
+    
 	private UI gui;
+
+	DataFileProcesser processor = new DataFileProcesser();
 	
-	public void setUI(UI inputUI){
+    /**
+     * @return the processor
+     */
+    public DataFileProcesser getProcessor() {
+        return processor;
+    }
+
+    private final List<WrongDataTypeStrategy> wrongDataStrategies = new ArrayList<WrongDataTypeStrategy>();
+	
+	/**
+     * @return the wrongDataStrategies
+     */
+    public List<WrongDataTypeStrategy> getWrongDataStrategies() {
+        return wrongDataStrategies;
+    }
+    
+    public void registerDataStrategy(WrongDataTypeStrategy stra) {
+        this.wrongDataStrategies.add(stra);
+    }
+
+    public void setUI(UI inputUI){
 		gui = inputUI;
 	}
 
@@ -32,10 +57,9 @@ public class calculate1svd {
 		gui.updateprogressArea("Loading Data \n ... \n");
 		
 		output = output + "/svdResult";
-		DataFileProcesser processor = new DataFileProcesser();
-        String[][] stringMat = processor.processingData(3, 4, input, ",", "dataType");
+		
+        String[][] stringMat = processor.processingData(5, 4, input, ",", "dataType");
         Matrix mat = new Matrix(stringMat);
-        int rown = mat.row;
 
         Matrix L1 = Matrix.getRandMat(mat.row, 1);
         Matrix L = Matrix.getRandMat(mat.row, 1);
@@ -44,11 +68,11 @@ public class calculate1svd {
         int slave_num = 2;
         int slave_size = mat.col / slave_num;
         
-        double thr = 1e-10;
+        double thr = 1e-29;
         Matrix e_new = new Matrix(mat.row, mat.col, 100);
         Matrix e = new Matrix(mat.row, mat.col, 0); 
         gui.updateprogressArea("Start Computing \n");
-        while (Matrix.getDiff(e, e_new) != 0) {
+        while (Matrix.getDiff(e, e_new) > thr) {
         	System.out.println(Matrix.getDiff(e, e_new));
     
         	for (int i = 0; i < slave_num; i++) {

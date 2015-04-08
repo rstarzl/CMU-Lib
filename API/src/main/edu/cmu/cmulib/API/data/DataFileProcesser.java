@@ -102,13 +102,6 @@ public class DataFileProcesser {
         while (line != null && numRowsSeen < numOfRows) {
             String[] tokens = line.split(delimiter);
 
-            // Check and correct data types
-            boolean[] flags = this.typeCheck(tokens, dataType);
-            if (!this.chcekSuccessful(flags) && wrongDataTypeStrategy != null) {
-                tokens = this.wrongDataTypeStrategy.handleWrongDataTypeInaRow(
-                        tokens, flags);
-            }
-
             // Check and correct the number of tokens
             if (tokens.length > numOfColumns
                     && tooManyDelimiterStrategy != null) {
@@ -142,24 +135,53 @@ public class DataFileProcesser {
             numOfRows = matrix.length;
         }
 
+        // Check and correct data types
+        for (int i = 0; i < matrix[0].length; i++) {
+            boolean[] flags = this.typeCheck(matrix, i, dataType);
+            if (!this.chcekSuccessful(flags) && wrongDataTypeStrategy != null) {
+                this.wrongDataTypeStrategy
+                        .handleWrongDataTypeInaColumn(matrix, i, flags);
+            }
+        }
         br.close();
         return matrix;
     }
 
     /**
-     * check the type in the given tokens
+     * check the type in the given column of the token
      * 
-     * @param tokens
-     *            the given tokens to check
+     * @param matrix
+     *            the given matrix to check
      * @param dataType
      *            the designed data type
+     * @param columnIndex
+     *            the index of the column to be checked
      * @return an array of boolean. Each element in the array was false if the
      *         element with the same index in tokens[] is not valid
      */
-    private boolean[] typeCheck(String[] tokens, String dataType) {
-        boolean[] flags = new boolean[tokens.length];
-        Arrays.fill(flags, true);
+    private boolean[] typeCheck(String[][] matrix, int columnIndex,
+            String dataType) {
+        boolean[] flags = new boolean[matrix.length];
+        for (int i = 0; i < matrix.length; i++) {
+            flags[i] = checkDouble(matrix[i][columnIndex]);
+        }
         return flags;
+    }
+
+    /**
+     * check if a token is valid double number
+     * 
+     * @param token
+     *            the token to be checked
+     * @return true if the token is a valid double number
+     */
+    private boolean checkDouble(String token) {
+        try {
+            Double.parseDouble(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
