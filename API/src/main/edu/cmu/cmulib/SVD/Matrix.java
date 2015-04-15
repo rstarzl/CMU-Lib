@@ -55,7 +55,7 @@ public class Matrix {
 		double[][] rndmat = new double[rown][col];
 		for (int i = 0; i < rown; i ++) {
 			for (int j = 0; j < col; j++) {
-				rndmat[i][j] = rnd.nextDouble();
+				rndmat[i][j] = rnd.nextInt(1000);
 			}
 		}	
 		return new Matrix(rndmat);
