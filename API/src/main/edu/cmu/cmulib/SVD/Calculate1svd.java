@@ -11,7 +11,12 @@ public class Calculate1svd {
 	
     
 	private UI gui;
+    private static final int NUM_COLUMNS = 100;
+    private static final int NUM_ROWS = 100;
 
+    private static final double THRESHOLD_SVD = 0;
+    
+	
 	DataFileProcesser processor = new DataFileProcesser();
 	
     /**
@@ -58,7 +63,7 @@ public class Calculate1svd {
 		
 		output = output + "/svdResult";
 		
-        String[][] stringMat = processor.processingData(5, 4, input, ",", "dataType");
+        String[][] stringMat = processor.processingData(NUM_ROWS, NUM_COLUMNS, input, ",", "dataType");
         Matrix mat = new Matrix(stringMat);
 
         Matrix L1 = Matrix.getRandMat(mat.row, 1);
@@ -68,11 +73,10 @@ public class Calculate1svd {
         int slave_num = 2;
         int slave_size = mat.col / slave_num;
         
-        double thr = 1e-28;
         Matrix e_new = new Matrix(mat.row, mat.col, 100);
         Matrix e = new Matrix(mat.row, mat.col, 0); 
         gui.updateprogressArea("Start Computing \n");
-        while (Matrix.getDiff(e, e_new) > thr) {
+        while (Matrix.getDiff(e, e_new) > THRESHOLD_SVD) {
         	System.out.println(Matrix.getDiff(e, e_new));
     
         	for (int i = 0; i < slave_num; i++) {
