@@ -73,7 +73,7 @@ public class Calculate1svd {
         Matrix e = new Matrix(mat.row, mat.col, 0); 
         gui.updateprogressArea("Start Computing \n");
         while (Matrix.getDiff(e, e_new) > thr) {
-        	System.out.println(Matrix.getDiff(e, e_new));
+        	//System.out.println(Matrix.getDiff(e, e_new));
     
         	for (int i = 0; i < slave_num; i++) {
         		int start = i * slave_size;
@@ -90,7 +90,7 @@ public class Calculate1svd {
         	System.out.println("L row" + L.row + "  L col " + L.col + "mat row" + mat.row + " mat col " + mat.col);
         	Matrix tmp = L.multiply(mat.transpose().multiply(L).transpose());
         	e_new = mat.minus(tmp);
-        	System.out.println("end" + Matrix.getDiff(e, e_new));
+        	System.out.println("diff(e, e_new): " + Matrix.getDiff(e, e_new));
         }    
         L.writeToFile(output);
         gui.updateprogressArea("***************** Finish Job *******************\n");
