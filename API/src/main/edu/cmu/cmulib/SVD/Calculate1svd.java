@@ -14,6 +14,7 @@ public class Calculate1svd {
     private static final int NUM_ROWS = 100;
 
     private static final double THRESHOLD_SVD = 0;
+    private static final int MAX_ITER = 100;
     
 	
 	DataFileProcesser processor = new DataFileProcesser();
@@ -75,6 +76,8 @@ public class Calculate1svd {
         Matrix e_new = new Matrix(mat.row, mat.col, 100);
         Matrix e = new Matrix(mat.row, mat.col, 0); 
         gui.updateprogressArea("Start Computing \n");
+        
+        int count = 0;
         while (Matrix.getDiff(e, e_new) > THRESHOLD_SVD) {
     
         	for (int i = 0; i < slave_num; i++) {
@@ -93,6 +96,9 @@ public class Calculate1svd {
         	Matrix tmp = L.multiply(mat.transpose().multiply(L).transpose());
         	e_new = mat.minus(tmp);
         	System.out.println("diff(e, e_new): " + Matrix.getDiff(e, e_new));
+        	if (++count >= 100) {
+        		break;
+        	}
         }    
         L.writeToFile(output);
         gui.updateprogressArea("***************** Finish Job *******************\n");
