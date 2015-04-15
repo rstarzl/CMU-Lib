@@ -10,9 +10,9 @@ package edu.cmu.cmulib.API.data;
 public class EmptyWrongDataStrategy implements WrongDataTypeStrategy {
 
     @Override
-    public String[][] handleWrongDataTypeInaColumn(String[][] matrix,
+    public void handleWrongDataTypeInaColumn(String[][] matrix,
             int columnIndex, boolean[] flags) {
-        return matrix;
+        return ;
     }
 
     @Override

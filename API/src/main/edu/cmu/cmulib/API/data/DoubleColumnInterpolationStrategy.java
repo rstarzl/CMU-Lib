@@ -29,7 +29,7 @@ public class DoubleColumnInterpolationStrategy implements WrongDataTypeStrategy 
     }
 
     @Override
-    public String[][] handleWrongDataTypeInaColumn(String[][] matrix,
+    public void handleWrongDataTypeInaColumn(String[][] matrix,
             int columnIndex, boolean[] flags) {
         for (int i = 0; i < matrix.length; i++) {
             if (!flags[i]) {
@@ -65,7 +65,7 @@ public class DoubleColumnInterpolationStrategy implements WrongDataTypeStrategy 
 
             }
         }
-        return null;
+        return;
     }
 
     @Override
