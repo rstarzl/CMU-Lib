@@ -7,5 +7,6 @@
   <filter name="UnOpenedFiles" enabled="true"/>
   <filter name="FilesFromPackage" enabled="true">
     <filter-data value="src/test"/>
+    <filter-data value="src/main/edu/cmu/cmulib/gui"/>
   </filter>
 </fileset-config>

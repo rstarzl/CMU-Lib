@@ -13,13 +13,21 @@ public interface WrongDataTypeStrategy {
     /**
      * handles the wrong data type in the given row
      * 
-     * @param tokens
-     *            a String array that stores the original tokens
+     * @param matrix
+     *            a String matrix that stores the original tokens
+     * @param columnIndex
+     *            the column index of the column to be handled
      * @param flags
      *            a boolean array indicating the corresponding data in tokens is
      *            valid
      * @return a String array containing the data with correct datatype
      */
-    String[] handleWrongDataTypeInaRow(String[] tokens, boolean[] flags);
+    String[][] handleWrongDataTypeInaColumn(String[][] matrix, int columnIndex,
+            boolean[] flags);
+
+    /**
+     * @return the name of this strategy
+     */
+    String getName();
 
 }
