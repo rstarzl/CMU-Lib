@@ -22,7 +22,7 @@ public class calculate1svd {
 		String output = "/Users/yingsheng/testMatout";
 		// TODO Auto-generated method stub
 		
-//		svdMaster(input, output);
+		// svdMaster(input, output);
 	}
 	
 	public String svdMaster(String input, String output) throws Exception {
@@ -70,8 +70,7 @@ public class calculate1svd {
         }    
         L.writeToFile(output);
         gui.updateprogressArea("***************** Finish Job *******************\n");
-        return output;
-        
+        return output;     
 	}
 	
 	
