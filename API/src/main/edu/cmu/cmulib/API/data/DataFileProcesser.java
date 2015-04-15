@@ -89,16 +89,19 @@ public class DataFileProcesser {
      * @throws Exception
      *             when it happens
      */
-    public String[][] processingData(int numOfRows, int numOfColumns,
-            String srcDataFile, String delimiter, String dataType)
+    public String[][] processingData(String srcDataFile, String delimiter, String dataType)
             throws Exception {
-
-        String[][] matrix = new String[numOfRows][numOfColumns];
 
         // Reading data from file
         BufferedReader br = new BufferedReader(new FileReader(srcDataFile));
         String line = br.readLine();
+        String[] info = line.split(",");
+        int numOfRows = Integer.parseInt(info[0]);
+        int numOfColumns = Integer.parseInt(info[1]);
+        String[][] matrix = new String[numOfRows][numOfColumns];
+        System.out.println("row " + numOfRows + " col " + numOfColumns );
         int numRowsSeen = 0;
+        line = br.readLine();
         while (line != null && numRowsSeen < numOfRows) {
             String[] tokens = line.split(delimiter);
 

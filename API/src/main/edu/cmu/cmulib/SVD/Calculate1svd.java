@@ -63,7 +63,7 @@ public class Calculate1svd {
 		
 		output = output + "/svdResult";
 		
-        String[][] stringMat = processor.processingData(NUM_ROWS, NUM_COLUMNS, input, ",", "dataType");
+        String[][] stringMat = processor.processingData(input, ",", "dataType");
         Matrix mat = new Matrix(stringMat);
 
         Matrix L1 = Matrix.getRandMat(mat.row, 1);
