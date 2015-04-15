@@ -20,9 +20,8 @@ public interface WrongDataTypeStrategy {
      * @param flags
      *            a boolean array indicating the corresponding data in tokens is
      *            valid
-     * @return a String array containing the data with correct datatype
      */
-    String[][] handleWrongDataTypeInaColumn(String[][] matrix, int columnIndex,
+    void handleWrongDataTypeInaColumn(String[][] matrix, int columnIndex,
             boolean[] flags);
 
     /**

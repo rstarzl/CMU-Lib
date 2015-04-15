@@ -1,6 +1,7 @@
 package edu.cmu.cmulib.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,6 +30,7 @@ import javax.swing.border.TitledBorder;
 
 import edu.cmu.cmulib.API.data.DoubleColumnInterpolationStrategy;
 import edu.cmu.cmulib.API.data.EmptyWrongDataStrategy;
+import edu.cmu.cmulib.API.data.HotDeckStrategy;
 import edu.cmu.cmulib.API.data.WrongDataTypeStrategy;
 import edu.cmu.cmulib.SVD.Calculate1svd;
 
@@ -42,7 +45,8 @@ public class UI extends JPanel {
     private static final int FIELD_LEN = 30;
     private static final int INPUT_ITEM_NUM = 4;
     private static final int DUMP_ITEM_NUM = 2;
-    private static final int TEXT_AREA_SIZE = 50;
+    private static final int TEXT_AREA_WIDTH = 50;
+    private static final int TEXT_AREA_HEIGHT = 20;
 
     private final JFrame frame = new JFrame(TITLE);
 
@@ -58,8 +62,8 @@ public class UI extends JPanel {
 
     /** run button and progress area */
     private final JButton runBtn = new JButton("Run");
-    private final JTextArea progressArea = new JTextArea(TEXT_AREA_SIZE,
-            TEXT_AREA_SIZE);
+    private final JTextArea progressArea = new JTextArea(TEXT_AREA_HEIGHT,
+            TEXT_AREA_WIDTH);
 
     /** file to download, download to, start downloading */
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -272,7 +276,7 @@ public class UI extends JPanel {
                         core.svdMaster(inputFile.getCanonicalPath(),
                                 outputFolder.getCanonicalPath());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        onShowingAlert("Error", "An exception is thrown during process");;
                     }
                 }
                 
@@ -308,6 +312,7 @@ public class UI extends JPanel {
         Calculate1svd core = new Calculate1svd();
         core.registerDataStrategy(new EmptyWrongDataStrategy());
         core.registerDataStrategy(new DoubleColumnInterpolationStrategy(0.0));
+        core.registerDataStrategy(new HotDeckStrategy(0.0));
         UI gui = new UI(core);
         core.setUI(gui);
         gui.show();
@@ -320,6 +325,27 @@ public class UI extends JPanel {
                 createAndShowGUI();
             }
         });
+    }
+    
+    public void onShowingAlert(String title, String message) {
+        JFrame frame = (JFrame) SwingUtilities.getRoot(this);
+        showDialog(frame, title, message);
+    }
+
+    /**
+     * show dialog
+     * 
+     * @param component
+     *            component
+     * @param title
+     *            title of the dialog
+     * @param message
+     *            message of the dialog
+     */
+    private static void showDialog(Component component, String title,
+            String message) {
+        JOptionPane.showMessageDialog(component, message, title,
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }

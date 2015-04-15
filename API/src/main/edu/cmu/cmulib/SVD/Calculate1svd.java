@@ -68,7 +68,7 @@ public class Calculate1svd {
         int slave_num = 2;
         int slave_size = mat.col / slave_num;
         
-        double thr = 1e-29;
+        double thr = 1e-28;
         Matrix e_new = new Matrix(mat.row, mat.col, 100);
         Matrix e = new Matrix(mat.row, mat.col, 0); 
         gui.updateprogressArea("Start Computing \n");

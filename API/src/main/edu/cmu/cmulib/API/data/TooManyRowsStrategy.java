@@ -8,8 +8,6 @@ import java.io.BufferedReader;
 /**
  * a strategy to handle more rows than expected
  * 
- * @author Cambi
- *
  */
 public interface TooManyRowsStrategy {
 
