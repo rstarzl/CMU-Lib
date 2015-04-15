@@ -76,7 +76,7 @@ public class Matrix {
 		for (int i = 0; i < row; i ++) {
 			for (int j = 0; j < col; j++) {
 				double tmp = x.get(i, j) - y.get(i, j);
-				res += tmp*tmp;
+				res += Math.abs(tmp);
 			}
 		}
 		return res;
